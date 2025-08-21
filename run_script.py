@@ -49,7 +49,7 @@ def run_app():
     # Run streamlit app
     try:
         subprocess.run([
-            sys.executable, "-m", "streamlit", "run", "app.py",
+            sys.executable, "-m", "streamlit", "run", "ria_main_app.py",
             "--server.port", "8501",
             "--server.headless", "false",
             "--browser.gatherUsageStats", "false"
