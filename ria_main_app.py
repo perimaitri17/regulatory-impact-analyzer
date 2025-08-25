@@ -550,58 +550,65 @@ def render_header(page_title):
     """, unsafe_allow_html=True)
 
 # Replace the render_home function's tool cards section with this corrected version:
-
 def render_home():
     render_header("Dashboard")
     
     # Platform Tools Section
     st.markdown("## 🚀 Platform Tools")
     
-    # Create HTML structure for the tool cards - FIXED VERSION
-    st.markdown("""
-    <div class="tools-section">
-        <div class="tools-grid">
-            <div class="tool-card-container ria-card">
-                <div class="tool-card-icon">🕵️</div>
-                <h3 class="tool-card-title">RIA - The Detective</h3>
-                <p class="tool-card-subtitle">Regulatory Impact Analyzer</p>
-                <p class="tool-card-description">AI-powered monitoring and analysis of regulatory updates, guidelines, and changes across global markets.</p>
-                <ul class="tool-card-features">
-                    <li>📈 Updates Feed</li>
-                    <li>🔍 Sources Monitoring</li>
-                    <li>📊 Analytics Dashboard</li>
-                    <li>🚨 Alert Settings</li>
-                </ul>
-            </div>
-            
-            <div class="tool-card-container rise-card">
-                <div class="tool-card-icon">🧭</div>
-                <h3 class="tool-card-title">RISE - The Guide</h3>
-                <p class="tool-card-subtitle">Regulatory Integration & Submission Engine</p>
-                <p class="tool-card-description">Workflow management and timeline tracking for regulatory submissions and milestone management.</p>
-                <ul class="tool-card-features">
-                    <li>⚡ Active Workflows</li>
-                    <li>📅 Timeline View</li>
-                    <li>🔗 Dependencies</li>
-                    <li>📋 Reports</li>
-                </ul>
-            </div>
-            
-            <div class="tool-card-container prism-card">
-                <div class="tool-card-icon">📚</div>
-                <h3 class="tool-card-title">PRISM - The Librarian</h3>
-                <p class="tool-card-subtitle">Product Regulatory Information & Submission Management</p>
-                <p class="tool-card-description">Comprehensive product portfolio and regulatory information management system.</p>
-                <ul class="tool-card-features">
-                    <li>🧬 Product Portfolio</li>
-                    <li>✅ Approvals & Renewals</li>
-                    <li>🔄 Variations Tracker</li>
-                    <li>📊 Compliance Dashboard</li>
-                </ul>
-            </div>
+    # Create three columns for the cards
+    col1, col2, col3 = st.columns(3, gap="large")
+    
+    # RIA Card
+    with col1:
+        st.markdown("""
+        <div class="tool-card-container ria-card">
+            <div class="tool-card-icon">🕵️</div>
+            <h3 class="tool-card-title">RIA - The Detective</h3>
+            <p class="tool-card-subtitle">Regulatory Impact Analyzer</p>
+            <p class="tool-card-description">AI-powered monitoring and analysis of regulatory updates, guidelines, and changes across global markets.</p>
+            <ul class="tool-card-features">
+                <li>📈 Updates Feed</li>
+                <li>🔍 Sources Monitoring</li>
+                <li>📊 Analytics Dashboard</li>
+                <li>🚨 Alert Settings</li>
+            </ul>
         </div>
-    </div>
-    """, unsafe_allow_html=True)
+        """, unsafe_allow_html=True)
+    
+    # RISE Card
+    with col2:
+        st.markdown("""
+        <div class="tool-card-container rise-card">
+            <div class="tool-card-icon">🧭</div>
+            <h3 class="tool-card-title">RISE - The Guide</h3>
+            <p class="tool-card-subtitle">Regulatory Integration & Submission Engine</p>
+            <p class="tool-card-description">Workflow management and timeline tracking for regulatory submissions and milestone management.</p>
+            <ul class="tool-card-features">
+                <li>⚡ Active Workflows</li>
+                <li>📅 Timeline View</li>
+                <li>🔗 Dependencies</li>
+                <li>📋 Reports</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # PRISM Card  
+    with col3:
+        st.markdown("""
+        <div class="tool-card-container prism-card">
+            <div class="tool-card-icon">📚</div>
+            <h3 class="tool-card-title">PRISM - The Librarian</h3>
+            <p class="tool-card-subtitle">Product Regulatory Information & Submission Management</p>
+            <p class="tool-card-description">Comprehensive product portfolio and regulatory information management system.</p>
+            <ul class="tool-card-features">
+                <li>🧬 Product Portfolio</li>
+                <li>✅ Approvals & Renewals</li>
+                <li>🔄 Variations Tracker</li>
+                <li>📊 Compliance Dashboard</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
     
     # Launch buttons in a clean row
     col1, col2, col3 = st.columns(3, gap="large")
@@ -664,7 +671,7 @@ def render_home():
                         </div>
                     </div>
                 """, unsafe_allow_html=True)
-
+                
 # RIA Detective page with fixed document rendering
 def render_ria_detective():
     render_header("RIA Detective")
