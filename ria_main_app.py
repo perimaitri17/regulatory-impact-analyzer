@@ -47,12 +47,24 @@ st.markdown("""
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
         transition: all 0.3s ease;
         cursor: pointer;
+        height: 350px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
     
     .tool-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
         border-color: #3b82f6;
+    }
+    
+    .tool-card h3 {
+        margin-bottom: 1rem;
+    }
+    
+    .tool-card-content {
+        flex-grow: 1;
     }
     
     .section-header {
@@ -165,6 +177,36 @@ st.markdown("""
         animation: pulse 2s infinite;
     }
     
+    .document-section {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 1rem 0;
+    }
+    
+    .highlight-text {
+        background-color: #fef08a;
+        padding: 0.2rem 0.4rem;
+        border-radius: 4px;
+        font-weight: bold;
+    }
+    
+    .diff-added {
+        background-color: #dcfce7;
+        border-left: 3px solid #16a34a;
+        padding: 0.5rem;
+        margin: 0.25rem 0;
+    }
+    
+    .diff-removed {
+        background-color: #fef2f2;
+        border-left: 3px solid #dc2626;
+        padding: 0.5rem;
+        margin: 0.25rem 0;
+        text-decoration: line-through;
+    }
+    
     @keyframes pulse {
         0%, 100% { opacity: 1; }
         50% { opacity: 0.8; }
@@ -181,6 +223,14 @@ if 'rise_nav' not in st.session_state:
     st.session_state.rise_nav = 'Active Workflows'
 if 'prism_nav' not in st.session_state:
     st.session_state.prism_nav = 'Product Portfolio'
+if 'show_source_doc' not in st.session_state:
+    st.session_state.show_source_doc = False
+if 'show_external_comparison' not in st.session_state:
+    st.session_state.show_external_comparison = False
+if 'show_ai_document' not in st.session_state:
+    st.session_state.show_ai_document = False
+if 'show_priority_logic' not in st.session_state:
+    st.session_state.show_priority_logic = False
 
 # Sample data
 @st.cache_data
@@ -188,7 +238,7 @@ def load_sample_data():
     # Product data with lifecycle stages
     products_data = [
         {
-            'id': 'PRD001', 'name': 'CardioX', 'category': 'Regulatory Affairs',
+            'id': 'PRD001', 'name': 'CardioX', 'category': 'Clinical Operations and Medical Affairs',
             'therapeutic_area': 'Cardiovascular', 'target_markets': ['US', 'EU', 'Japan'],
             'recent_approvals': ['FDA NDA Approval (2024)', 'EMA MAA Under Review'],
             'variations': ['Labeling Update Q1 2025', 'Manufacturing Site Change']
@@ -206,7 +256,7 @@ def load_sample_data():
             'variations': ['REMS Update', 'Post-Marketing Study Protocol']
         },
         {
-            'id': 'PRD004', 'name': 'DiabeSure', 'category': 'Commercial & Marketing',
+            'id': 'PRD004', 'name': 'DiabeSure', 'category': 'Regulatory Affairs',
             'therapeutic_area': 'Endocrinology', 'target_markets': ['US', 'EU', 'China'],
             'recent_approvals': ['US Approval (2023)', 'EU Submission Q4 2024'],
             'variations': ['Price Variation EU', 'New Strength Development']
@@ -310,61 +360,64 @@ def render_home():
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        st.markdown("""
-        <div class="tool-card" onclick="location.href='#ria-detective'">
-            <h3 style="color: #dc2626; margin-bottom: 1rem;">🕵️ RIA - The Detective</h3>
-            <p><strong>Regulatory Intelligence Analysis</strong></p>
-            <p>AI-powered monitoring and analysis of regulatory updates, guidelines, and changes across global markets.</p>
-            <ul>
-                <li>📈 Updates Feed</li>
-                <li>🔍 Sources Monitoring</li>
-                <li>📊 Analytics Dashboard</li>
-                <li>🚨 Alert Settings</li>
-            </ul>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        if st.button("Launch RIA Detective", use_container_width=True, key="launch_ria"):
+        if st.button("", key="ria_card", help="Click to launch RIA Detective"):
             st.session_state.current_page = 'RIA Detective'
             st.rerun()
+        st.markdown("""
+        <div class="tool-card">
+            <div class="tool-card-content">
+                <h3 style="color: #dc2626; margin-bottom: 1rem;">🕵️ RIA - The Detective</h3>
+                <p><strong>Regulatory Intelligence Analysis</strong></p>
+                <p>AI-powered monitoring and analysis of regulatory updates, guidelines, and changes across global markets.</p>
+                <ul>
+                    <li>📈 Updates Feed</li>
+                    <li>🔍 Sources Monitoring</li>
+                    <li>📊 Analytics Dashboard</li>
+                    <li>🚨 Alert Settings</li>
+                </ul>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
     
     with col2:
-        st.markdown("""
-        <div class="tool-card" onclick="location.href='#rise-guider'">
-            <h3 style="color: #f59e0b; margin-bottom: 1rem;">🧭 RISE - The Guide</h3>
-            <p><strong>Regulatory Integration & Submission Engine</strong></p>
-            <p>Workflow management and timeline tracking for regulatory submissions and milestone management.</p>
-            <ul>
-                <li>⚡ Active Workflows</li>
-                <li>📅 Timeline View</li>
-                <li>🔗 Dependencies</li>
-                <li>📋 Reports</li>
-            </ul>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        if st.button("Launch RISE Guider", use_container_width=True, key="launch_rise"):
+        if st.button("", key="rise_card", help="Click to launch RISE Guider"):
             st.session_state.current_page = 'RISE Guider'
             st.rerun()
-    
-    with col3:
         st.markdown("""
-        <div class="tool-card" onclick="location.href='#prism-keeper'">
-            <h3 style="color: #16a34a; margin-bottom: 1rem;">📚 PRISM - The Librarian</h3>
-            <p><strong>Product Regulatory Information & Submission Management</strong></p>
-            <p>Comprehensive product portfolio and regulatory information management system.</p>
-            <ul>
-                <li>🧬 Product Portfolio</li>
-                <li>✅ Approvals & Renewals</li>
-                <li>🔄 Variations Tracker</li>
-                <li>📊 Compliance Dashboard</li>
-            </ul>
+        <div class="tool-card">
+            <div class="tool-card-content">
+                <h3 style="color: #f59e0b; margin-bottom: 1rem;">🧭 RISE - The Guide</h3>
+                <p><strong>Regulatory Integration & Submission Engine</strong></p>
+                <p>Workflow management and timeline tracking for regulatory submissions and milestone management.</p>
+                <ul>
+                    <li>⚡ Active Workflows</li>
+                    <li>📅 Timeline View</li>
+                    <li>🔗 Dependencies</li>
+                    <li>📋 Reports</li>
+                </ul>
+            </div>
         </div>
         """, unsafe_allow_html=True)
-        
-        if st.button("Launch PRISM Keeper", use_container_width=True, key="launch_prism"):
+    
+    with col3:
+        if st.button("", key="prism_card", help="Click to launch PRISM Keeper"):
             st.session_state.current_page = 'PRISM Keeper'
             st.rerun()
+        st.markdown("""
+        <div class="tool-card">
+            <div class="tool-card-content">
+                <h3 style="color: #16a34a; margin-bottom: 1rem;">📚 PRISM - The Librarian</h3>
+                <p><strong>Product Regulatory Information & Submission Management</strong></p>
+                <p>Comprehensive product portfolio and regulatory information management system.</p>
+                <ul>
+                    <li>🧬 Product Portfolio</li>
+                    <li>✅ Approvals & Renewals</li>
+                    <li>🔄 Variations Tracker</li>
+                    <li>📊 Compliance Dashboard</li>
+                </ul>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
     
     # Recent activity and critical alerts
     col1, col2 = st.columns(2)
@@ -415,10 +468,10 @@ def render_home():
 def render_ria_detective():
     render_header("RIA Detective")
     
-    # RIA description section
+    # RIA description section - CORRECTED
     st.markdown("""
     <div class="section-header">
-        <h3 style="margin: 0; color: #1e3a8a;">🕵️ RIA - Regulatory Intelligence Analysis</h3>
+        <h3 style="margin: 0; color: #1e3a8a;">🕵️ RIA - Regulatory Impact Analyzer</h3>
         <p style="margin: 0.5rem 0 0 0; color: #64748b;">AI-powered regulatory monitoring and impact analysis system</p>
     </div>
     """, unsafe_allow_html=True)
@@ -454,22 +507,26 @@ def render_ria_detective():
         # Sample regulatory updates
         updates = [
             {
+                'id': 'update_1',
                 'title': 'FDA Issues New Diabetes Drug Labeling Guidance',
                 'source': 'FDA.gov',
                 'date': '2025-08-22',
                 'priority': 'HIGH',
                 'products_affected': ['DiabeSure'],
                 'countries': ['US'],
-                'summary': 'New labeling requirements for diabetes medications including cardiovascular risk disclosures.'
+                'summary': 'New labeling requirements for diabetes medications including cardiovascular risk disclosures.',
+                'source_url': 'https://www.fda.gov/drugs/guidance-regulation-page/diabetes-labeling-guidance-2025'
             },
             {
+                'id': 'update_2',
                 'title': 'EMA Updates Cardiovascular Safety Assessment',
                 'source': 'EMA.europa.eu',
                 'date': '2025-08-21',
                 'priority': 'MEDIUM',
                 'products_affected': ['CardioX', 'NeuroHeal'],
                 'countries': ['EU', 'UK'],
-                'summary': 'Updated guidance on cardiovascular safety evaluation for new drug applications.'
+                'summary': 'Updated guidance on cardiovascular safety evaluation for new drug applications.',
+                'source_url': 'https://www.ema.europa.eu/en/cardiovascular-safety-assessment-2025'
             }
         ]
         
@@ -498,18 +555,109 @@ def render_ria_detective():
                 
                 # Action buttons
                 col1, col2, col3, col4 = st.columns(4)
+                
                 with col1:
-                    if st.button("📄 Source Document", key=f"source_{update['title']}"):
-                        st.info("Opening source document...")
+                    if st.button("📄 Source Document", key=f"source_{update['id']}"):
+                        st.session_state.show_source_doc = update['id']
+                
                 with col2:
-                    if st.button("🔄 External Comparison", key=f"compare_{update['title']}"):
-                        st.info("Comparing with external requirements...")
+                    if st.button("🔄 External Comparison", key=f"compare_{update['id']}"):
+                        st.session_state.show_external_comparison = update['id']
+                
                 with col3:
-                    if st.button("🤖 AI Modified Document", key=f"ai_doc_{update['title']}"):
-                        st.success("AI-generated modified document created!")
+                    if st.button("🤖 AI Modified Document", key=f"ai_doc_{update['id']}"):
+                        st.session_state.show_ai_document = update['id']
+                
                 with col4:
-                    if st.button("⚡ Priority Logic", key=f"priority_{update['title']}"):
-                        st.info("Showing priority determination logic...")
+                    if st.button("⚡ Priority Logic", key=f"priority_{update['id']}"):
+                        st.session_state.show_priority_logic = update['id']
+                
+                # Show source document
+                if st.session_state.show_source_doc == update['id']:
+                    st.markdown("### 📄 Source Document")
+                    st.info(f"**Document URL:** {update['source_url']}")
+                    st.markdown("**Document Summary:** This guidance document provides updated requirements for diabetes drug labeling with emphasis on cardiovascular risk assessment and disclosure requirements.")
+                
+                # Show external comparison
+                if st.session_state.show_external_comparison == update['id']:
+                    st.markdown("### 🔄 External Comparison")
+                    col1, col2 = st.columns(2)
+                    
+                    with col1:
+                        st.markdown("**Current Database Requirements:**")
+                        st.markdown("""
+                        - Standard diabetes labeling format
+                        - Basic efficacy data required
+                        - Limited cardiovascular warnings
+                        - Standard adverse event reporting
+                        """)
+                    
+                    with col2:
+                        st.markdown("**New External Requirements:**")
+                        st.markdown("""
+                        - **Enhanced cardiovascular risk section** ⚠️
+                        - **Detailed cardiac monitoring protocols** ⚠️
+                        - **Patient counseling requirements** ⚠️
+                        - **Updated contraindications list** ⚠️
+                        """)
+                
+                # Show AI modified document
+                if st.session_state.show_ai_document == update['id']:
+                    st.markdown("### 🤖 AI Modified Document")
+                    st.markdown("""
+                    <div class="document-section">
+                        <h4>DiabeSure Product Labeling - Updated Version</h4>
+                        
+                        <h5>Section 5: WARNINGS AND PRECAUTIONS</h5>
+                        
+                        <div class="diff-added">
+                        <strong>5.1 CARDIOVASCULAR RISK ASSESSMENT (NEW)</strong><br>
+                        Prior to initiating DiabeSure therapy, conduct comprehensive cardiovascular risk assessment including:
+                        - Baseline ECG evaluation
+                        - Assessment of cardiovascular risk factors
+                        - Patient history of cardiac events
+                        </div>
+                        
+                        <div class="diff-removed">
+                        5.1 General Safety Information
+                        Standard diabetes medication precautions apply.
+                        </div>
+                        
+                        <div class="diff-added">
+                        <strong>5.2 CARDIAC MONITORING REQUIREMENTS (NEW)</strong><br>
+                        Regular cardiac monitoring is required for patients with:
+                        - Pre-existing cardiovascular conditions
+                        - Age > 65 years
+                        - Multiple cardiovascular risk factors
+                        </div>
+                        
+                        <h5>Section 17: PATIENT COUNSELING INFORMATION</h5>
+                        
+                        <div class="diff-added">
+                        <strong>17.3 CARDIOVASCULAR RISK COUNSELING (NEW)</strong><br>
+                        Inform patients about potential cardiovascular risks and advise to:
+                        - Report chest pain, shortness of breath, or palpitations immediately
+                        - Maintain regular cardiac monitoring appointments
+                        - Understand signs and symptoms of cardiac events
+                        </div>
+                    </div>
+                    """, unsafe_allow_html=True)
+                
+                # Show priority logic
+                if st.session_state.show_priority_logic == update['id']:
+                    st.markdown("### ⚡ Priority Determination Logic")
+                    st.markdown("""
+                    **Priority Score: HIGH (85/100)**
+                    
+                    **Scoring Factors:**
+                    - Regulatory Authority Impact: FDA (25/25) ✅
+                    - Product Impact: DiabeSure directly affected (20/20) ✅
+                    - Timeline Urgency: 30 days implementation (15/20) ⚠️
+                    - Business Impact: Major labeling changes required (20/25) ⚠️
+                    - Compliance Risk: High non-compliance penalty (15/15) ✅
+                    
+                    **Recommendation:** Immediate action required for compliance team
+                    """)
     
     elif st.session_state.ria_nav == 'Sources':
         st.markdown("## 🔍 Source Monitoring")
@@ -585,14 +733,16 @@ def render_rise_guider():
                 st.session_state.rise_nav = option
     
     products_data, workflow_stages, _, _ = load_sample_data()
+    product_names = [p['name'] for p in products_data]
     
     if st.session_state.rise_nav == 'Active Workflows':
         st.markdown("## ⚡ Active Workflows")
         
-        # Product and region selector
+        # Product and region selector - DiabeSure as default
         col1, col2 = st.columns(2)
         with col1:
-            selected_product = st.selectbox("Select Product", [p['name'] for p in products_data])
+            diabesure_index = product_names.index('DiabeSure') if 'DiabeSure' in product_names else 0
+            selected_product = st.selectbox("Select Product", product_names, index=diabesure_index)
         with col2:
             selected_region = st.selectbox("Select Region", ["US", "EU", "Japan", "India", "China"])
         
@@ -769,6 +919,87 @@ def render_prism_keeper():
                         st.markdown("**Product Variations:**")
                         for variation in product['variations']:
                             st.markdown(f"• {variation}")
+                    
+                    # Add document comparison for DiabeSure in Regulatory Affairs
+                    if product['name'] == 'DiabeSure':
+                        st.markdown("---")
+                        st.markdown("### 📄 Document Management")
+                        
+                        col1, col2 = st.columns(2)
+                        
+                        with col1:
+                            if st.button("📋 Current Document", key=f"current_doc_{product['id']}"):
+                                st.session_state[f"show_current_{product['id']}"] = True
+                        
+                        with col2:
+                            if st.button("🤖 AI Updated Document", key=f"ai_updated_doc_{product['id']}"):
+                                st.session_state[f"show_ai_updated_{product['id']}"] = True
+                        
+                        # Show current document
+                        if st.session_state.get(f"show_current_{product['id']}", False):
+                            st.markdown("#### 📋 Current DiabeSure Labeling Document")
+                            st.markdown("""
+                            <div class="document-section">
+                                <h5>Section 5: WARNINGS AND PRECAUTIONS</h5>
+                                <p><strong>5.1 General Safety Information</strong><br>
+                                Standard diabetes medication precautions apply. Monitor blood glucose levels regularly.</p>
+                                
+                                <p><strong>5.2 Hypoglycemia Risk</strong><br>
+                                Risk of hypoglycemia, especially when combined with other antidiabetic agents.</p>
+                                
+                                <h5>Section 17: PATIENT COUNSELING INFORMATION</h5>
+                                <p><strong>17.1 General Information</strong><br>
+                                Inform patients about proper administration and monitoring requirements.</p>
+                                
+                                <p><strong>17.2 Side Effects</strong><br>
+                                Discuss common side effects and when to contact healthcare provider.</p>
+                            </div>
+                            """, unsafe_allow_html=True)
+                        
+                        # Show AI updated document with highlights
+                        if st.session_state.get(f"show_ai_updated_{product['id']}", False):
+                            st.markdown("#### 🤖 AI Updated DiabeSure Labeling Document")
+                            st.markdown("""
+                            <div class="document-section">
+                                <h5>Section 5: WARNINGS AND PRECAUTIONS</h5>
+                                
+                                <div class="diff-added">
+                                <p><strong>5.1 CARDIOVASCULAR RISK ASSESSMENT (UPDATED)</strong><br>
+                                <span class="highlight-text">Prior to initiating DiabeSure therapy, conduct comprehensive cardiovascular risk assessment including baseline ECG evaluation, assessment of cardiovascular risk factors, and patient history of cardiac events.</span></p>
+                                </div>
+                                
+                                <div class="diff-removed">
+                                <p><strong>5.1 General Safety Information</strong><br>
+                                Standard diabetes medication precautions apply. Monitor blood glucose levels regularly.</p>
+                                </div>
+                                
+                                <p><strong>5.2 Hypoglycemia Risk</strong><br>
+                                Risk of hypoglycemia, especially when combined with other antidiabetic agents.</p>
+                                
+                                <div class="diff-added">
+                                <p><strong>5.3 CARDIAC MONITORING REQUIREMENTS (NEW)</strong><br>
+                                <span class="highlight-text">Regular cardiac monitoring is required for patients with pre-existing cardiovascular conditions, age > 65 years, or multiple cardiovascular risk factors.</span></p>
+                                </div>
+                                
+                                <h5>Section 17: PATIENT COUNSELING INFORMATION</h5>
+                                <p><strong>17.1 General Information</strong><br>
+                                Inform patients about proper administration and monitoring requirements.</p>
+                                
+                                <p><strong>17.2 Side Effects</strong><br>
+                                Discuss common side effects and when to contact healthcare provider.</p>
+                                
+                                <div class="diff-added">
+                                <p><strong>17.3 CARDIOVASCULAR RISK COUNSELING (NEW)</strong><br>
+                                <span class="highlight-text">Inform patients about potential cardiovascular risks and advise to report chest pain, shortness of breath, or palpitations immediately. Maintain regular cardiac monitoring appointments and understand signs and symptoms of cardiac events.</span></p>
+                                </div>
+                            </div>
+                            """, unsafe_allow_html=True)
+                            
+                            if st.button("💾 Accept AI Changes", key=f"accept_changes_{product['id']}"):
+                                st.success("✅ AI changes have been accepted and document updated!")
+                            
+                            if st.button("❌ Reject Changes", key=f"reject_changes_{product['id']}"):
+                                st.warning("⚠️ AI changes have been rejected. Current document maintained.")
     
     elif st.session_state.prism_nav == 'Approvals & Renewals':
         st.markdown("## ✅ Approvals & Renewals")
