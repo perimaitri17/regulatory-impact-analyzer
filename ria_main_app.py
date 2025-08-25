@@ -537,13 +537,13 @@ def render_sidebar():
 
 # Header component
 def render_header(page_title):
-    st.markdown(f"""
-    <div class="main-header">
-        <div class="logo-section">
+    st.markdown("""
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 1.2rem 2rem; border-radius: 16px; color: white; margin-bottom: 2rem; box-shadow: 0 8px 32px rgba(102, 126, 234, 0.25); display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 1rem; font-size: 2.2rem; font-weight: 800;">
             <span>🤖</span>
             <span>AURA</span>
         </div>
-        <div class="header-fullform">
+        <div style="font-size: 1.4rem; font-weight: 600; opacity: 0.95;">
             Automated Unified Regulatory Assistant
         </div>
     </div>
