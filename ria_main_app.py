@@ -14,174 +14,512 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for professional styling
+# Custom CSS for professional styling with responsive design and dark mode support
 st.markdown("""
 <style>
+    /* CSS Variables for Light and Dark Mode */
+    :root {
+        --bg-primary: #ffffff;
+        --bg-secondary: #f8fafc;
+        --bg-tertiary: #f1f5f9;
+        --text-primary: #1e293b;
+        --text-secondary: #64748b;
+        --text-muted: #94a3b8;
+        --border-color: #e2e8f0;
+        --border-hover: #cbd5e1;
+        --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        --card-shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+    
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --bg-primary: #1e293b;
+            --bg-secondary: #334155;
+            --bg-tertiary: #475569;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: #475569;
+            --border-hover: #64748b;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            --card-shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+        }
+    }
+    
+    /* Global Styles */
+    .stApp {
+        background-color: var(--bg-secondary);
+        color: var(--text-primary);
+    }
+    
+    .main .block-container {
+        padding-top: 1rem;
+        max-width: 100%;
+    }
+    
+    /* Sticky Header with Full Form */
     .main-header {
-        background: linear-gradient(90deg, #1e3a8a 0%, #3b82f6 100%);
-        padding: 1.5rem;
-        border-radius: 12px;
+        background: var(--gradient-primary);
+        padding: 1.2rem 2rem;
+        border-radius: 0 0 20px 20px;
         color: white;
-        text-align: left;
         margin-bottom: 2rem;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 8px 32px rgba(102, 126, 234, 0.25);
         display: flex;
         align-items: center;
-        gap: 1rem;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
     }
     
     .logo-section {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
-        font-size: 2rem;
-        font-weight: bold;
+        gap: 1rem;
+        font-size: 2.2rem;
+        font-weight: 800;
+    }
+    
+    .header-fullform {
+        text-align: right;
+        font-size: 1.4rem;
+        font-weight: 600;
+        opacity: 0.95;
+        letter-spacing: 0.5px;
+    }
+    
+    /* Responsive Header */
+    @media (max-width: 768px) {
+        .main-header {
+            padding: 1rem;
+            flex-direction: column;
+            text-align: center;
+            gap: 0.5rem;
+        }
+        
+        .logo-section {
+            font-size: 1.8rem;
+        }
+        
+        .header-fullform {
+            font-size: 1.1rem;
+            text-align: center;
+        }
+    }
+    
+    /* Platform Tools Section */
+    .platform-tools-section {
+        margin: 3rem 0;
+    }
+    
+    .section-title {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 2rem;
+        text-align: center;
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    /* Tool Cards Grid */
+    .tool-cards-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+        margin-bottom: 4rem;
+        padding: 0 1rem;
+    }
+    
+    @media (max-width: 1200px) {
+        .tool-cards-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .tool-cards-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            padding: 0;
+        }
     }
     
     .tool-card {
-        background: white;
-        border: 1px solid #e5e7eb;
-        border-radius: 12px;
-        padding: 1.5rem;
-        margin: 1rem 0;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-        transition: all 0.3s ease;
+        background: var(--bg-primary);
+        border: 2px solid var(--border-color);
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: var(--card-shadow);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         cursor: pointer;
-        height: 350px;
+        position: relative;
+        overflow: hidden;
+        height: 100%;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        min-height: 400px;
+    }
+    
+    .tool-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: var(--gradient-primary);
+        opacity: 0;
+        transition: opacity 0.3s ease;
     }
     
     .tool-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-        border-color: #3b82f6;
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: var(--card-shadow-hover);
+        border-color: #667eea;
     }
     
-    .tool-card h3 {
-        margin-bottom: 1rem;
+    .tool-card:hover::before {
+        opacity: 1;
     }
     
-    .tool-card-content {
-        flex-grow: 1;
-    }
-    
-    .section-header {
-        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-        padding: 1rem 1.5rem;
-        border-radius: 8px;
-        border-left: 4px solid #3b82f6;
-        margin: 1rem 0;
-    }
-    
-    .nav-bar {
-        background: #f1f5f9;
-        border-radius: 8px;
-        padding: 0.5rem;
-        margin: 1rem 0;
+    .tool-card-header {
         display: flex;
+        align-items: flex-start;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .tool-icon {
+        font-size: 3rem;
+        padding: 1rem;
+        border-radius: 16px;
+        background: var(--gradient-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+        min-width: 80px;
+        min-height: 80px;
+    }
+    
+    .tool-card-title {
+        flex: 1;
+    }
+    
+    .tool-card-title h3 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-primary);
+    }
+    
+    .tool-card-subtitle {
+        margin: 0;
+        font-weight: 600;
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+    }
+    
+    .tool-card-description {
+        flex: 1;
+        color: var(--text-secondary);
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+        font-size: 1rem;
+    }
+    
+    .tool-features {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
         gap: 0.5rem;
     }
     
-    .nav-item {
-        padding: 0.5rem 1rem;
-        border-radius: 6px;
-        background: white;
-        border: 1px solid #d1d5db;
-        cursor: pointer;
-        transition: all 0.2s ease;
+    .tool-features li {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+        font-weight: 500;
     }
     
-    .nav-item:hover {
-        background: #3b82f6;
-        color: white;
+    @media (max-width: 768px) {
+        .tool-features {
+            grid-template-columns: 1fr;
+        }
     }
     
-    .nav-item.active {
-        background: #3b82f6;
-        color: white;
+    /* Color coding for different tools */
+    .ria-card {
+        border-left: 6px solid #dc2626;
+    }
+    .ria-card .tool-icon {
+        background: linear-gradient(135deg, #dc2626, #ef4444);
+    }
+    .ria-card h3 {
+        color: #dc2626;
     }
     
-    .filter-section {
-        background: #f8fafc;
+    .rise-card {
+        border-left: 6px solid #f59e0b;
+    }
+    .rise-card .tool-icon {
+        background: linear-gradient(135deg, #f59e0b, #fbbf24);
+    }
+    .rise-card h3 {
+        color: #f59e0b;
+    }
+    
+    .prism-card {
+        border-left: 6px solid #16a34a;
+    }
+    .prism-card .tool-icon {
+        background: linear-gradient(135deg, #16a34a, #22c55e);
+    }
+    .prism-card h3 {
+        color: #16a34a;
+    }
+    
+    /* Activity and Alerts Container */
+    .activity-alerts-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        margin: 4rem 0 2rem 0;
+        padding: 0 1rem;
+    }
+    
+    @media (max-width: 768px) {
+        .activity-alerts-container {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            padding: 0;
+        }
+    }
+    
+    .activity-section, .alerts-section {
+        background: var(--bg-primary);
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: var(--card-shadow);
+        border: 1px solid var(--border-color);
+    }
+    
+    .section-header-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .recent-activity-item {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
         padding: 1rem;
-        border-radius: 8px;
-        margin: 1rem 0;
-        border: 1px solid #e2e8f0;
+        margin: 0.75rem 0;
+        transition: all 0.3s ease;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
     
-    .workflow-milestone {
-        background: white;
-        border-left: 4px solid #e5e7eb;
-        padding: 1rem;
-        margin: 0.5rem 0;
-        border-radius: 0 8px 8px 0;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    .recent-activity-item:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--card-shadow);
+        border-color: var(--border-hover);
     }
     
-    .milestone-active {
-        border-left-color: #f59e0b;
-        background: #fffbeb;
+    .activity-content {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex: 1;
     }
     
-    .milestone-completed {
-        border-left-color: #16a34a;
-        background: #f0fdf4;
+    .activity-time {
+        font-size: 0.85rem;
+        color: var(--text-muted);
     }
     
-    .milestone-pending {
-        border-left-color: #6b7280;
-        background: #f9fafb;
+    .critical-alert-item {
+        border-radius: 12px;
+        padding: 1.25rem;
+        margin: 0.75rem 0;
+        border-left: 5px solid;
+        transition: all 0.3s ease;
+        animation: pulse-alert 3s infinite;
     }
     
-    .priority-high { background: #fef2f2; border-left: 4px solid #dc2626; }
-    .priority-medium { background: #fffbeb; border-left: 4px solid #f59e0b; }
-    .priority-low { background: #f0fdf4; border-left: 4px solid #16a34a; }
+    .alert-high {
+        background: linear-gradient(135deg, #fef2f2, #fee2e2);
+        border-color: #dc2626;
+        color: #7f1d1d;
+    }
     
-    .lifecycle-badge {
-        display: inline-block;
+    .alert-medium {
+        background: linear-gradient(135deg, #fffbeb, #fef3c7);
+        border-color: #f59e0b;
+        color: #78350f;
+    }
+    
+    .alert-low {
+        background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+        border-color: #16a34a;
+        color: #14532d;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+        .alert-high {
+            background: linear-gradient(135deg, #1f1717, #2d1b1b);
+            color: #fca5a5;
+        }
+        
+        .alert-medium {
+            background: linear-gradient(135deg, #1f1a0d, #2d1f0d);
+            color: #fcd34d;
+        }
+        
+        .alert-low {
+            background: linear-gradient(135deg, #0f1f13, #162d19);
+            color: #86efac;
+        }
+    }
+    
+    .alert-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .alert-priority {
+        font-weight: 700;
+        font-size: 0.9rem;
+    }
+    
+    .alert-deadline {
+        background: rgba(0, 0, 0, 0.1);
         padding: 0.25rem 0.75rem;
         border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+    
+    .alert-message {
+        margin: 0;
+        line-height: 1.4;
+        font-weight: 500;
+    }
+    
+    /* Remove fullform from sidebar */
+    .css-1d391kg p {
+        display: none !important;
+    }
+    
+    /* Footer */
+    .footer {
+        text-align: center;
+        padding: 2rem;
+        background: var(--bg-primary);
+        border-radius: 16px;
+        margin-top: 3rem;
+        border: 1px solid var(--border-color);
+    }
+    
+    .footer p {
+        margin: 0.5rem 0;
+        color: var(--text-secondary);
+    }
+    
+    .footer a {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 600;
+    }
+    
+    .footer a:hover {
+        text-decoration: underline;
+    }
+    
+    /* Lifecycle badges */
+    .lifecycle-badge {
+        display: inline-block;
+        padding: 0.4rem 1rem;
+        border-radius: 25px;
         font-size: 0.85rem;
         font-weight: 600;
         color: white;
         margin: 0.25rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     }
     
-    .rd { background-color: #7c3aed; }
-    .clinical { background-color: #2563eb; }
-    .regulatory { background-color: #dc2626; }
-    .pharmacovigilance { background-color: #ea580c; }
-    .cmc { background-color: #16a34a; }
-    .quality { background-color: #0891b2; }
-    .manufacturing { background-color: #4338ca; }
-    .commercial { background-color: #be123c; }
-    .medical { background-color: #059669; }
-    .corporate { background-color: #374151; }
+    .rd { background: linear-gradient(135deg, #8b5cf6, #a78bfa); }
+    .clinical { background: linear-gradient(135deg, #3b82f6, #60a5fa); }
+    .regulatory { background: linear-gradient(135deg, #dc2626, #ef4444); }
+    .pharmacovigilance { background: linear-gradient(135deg, #ea580c, #fb923c); }
+    .cmc { background: linear-gradient(135deg, #16a34a, #22c55e); }
+    .quality { background: linear-gradient(135deg, #0891b2, #06b6d4); }
+    .manufacturing { background: linear-gradient(135deg, #4338ca, #6366f1); }
+    .commercial { background: linear-gradient(135deg, #be123c, #e11d48); }
+    .medical { background: linear-gradient(135deg, #059669, #10b981); }
+    .corporate { background: linear-gradient(135deg, #374151, #6b7280); }
     
-    .recent-activity {
-        background: white;
-        border: 1px solid #e5e7eb;
-        border-radius: 8px;
-        padding: 1rem;
-        margin: 0.5rem 0;
+    @keyframes pulse-alert {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.85; }
     }
     
-    .critical-alert {
-        background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
-        border: 1px solid #fca5a5;
-        border-radius: 8px;
-        padding: 1rem;
-        margin: 0.5rem 0;
-        animation: pulse 2s infinite;
+    /* Workflow milestones */
+    .workflow-milestone {
+        background: var(--bg-primary);
+        border-left: 4px solid var(--border-color);
+        padding: 1.2rem;
+        margin: 0.75rem 0;
+        border-radius: 0 12px 12px 0;
+        box-shadow: var(--card-shadow);
+        transition: all 0.3s ease;
     }
     
+    .milestone-active {
+        border-left-color: #f59e0b;
+        background: linear-gradient(135deg, #fffbeb, #fef3c7);
+    }
+    
+    .milestone-completed {
+        border-left-color: #16a34a;
+        background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+    }
+    
+    .milestone-pending {
+        border-left-color: #6b7280;
+        background: var(--bg-secondary);
+        opacity: 0.8;
+    }
+    
+    /* Document sections */
     .document-section {
-        background: #f8fafc;
-        border: 1px solid #e2e8f0;
-        border-radius: 8px;
-        padding: 1rem;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 1.5rem;
         margin: 1rem 0;
     }
     
@@ -189,27 +527,73 @@ st.markdown("""
         background-color: #fef08a;
         padding: 0.2rem 0.4rem;
         border-radius: 4px;
-        font-weight: bold;
+        font-weight: 600;
+        color: #854d0e;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+        .highlight-text {
+            background-color: #713f12;
+            color: #fde68a;
+        }
     }
     
     .diff-added {
-        background-color: #dcfce7;
-        border-left: 3px solid #16a34a;
-        padding: 0.5rem;
-        margin: 0.25rem 0;
+        background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+        border-left: 4px solid #16a34a;
+        padding: 0.75rem;
+        margin: 0.5rem 0;
+        border-radius: 0 8px 8px 0;
     }
     
     .diff-removed {
-        background-color: #fef2f2;
-        border-left: 3px solid #dc2626;
-        padding: 0.5rem;
-        margin: 0.25rem 0;
+        background: linear-gradient(135deg, #fef2f2, #fecaca);
+        border-left: 4px solid #dc2626;
+        padding: 0.75rem;
+        margin: 0.5rem 0;
+        border-radius: 0 8px 8px 0;
         text-decoration: line-through;
+        opacity: 0.7;
     }
     
-    @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.8; }
+    @media (prefers-color-scheme: dark) {
+        .diff-added {
+            background: linear-gradient(135deg, #14532d, #166534);
+            color: #bbf7d0;
+        }
+        
+        .diff-removed {
+            background: linear-gradient(135deg, #581c1c, #7f1d1d);
+            color: #fecaca;
+        }
+    }
+    
+    /* Responsive improvements */
+    @media (max-width: 480px) {
+        .tool-card {
+            padding: 1.5rem;
+            min-height: 350px;
+        }
+        
+        .tool-card-header {
+            flex-direction: column;
+            text-align: center;
+            gap: 1rem;
+        }
+        
+        .tool-icon {
+            font-size: 2.5rem;
+            min-width: 70px;
+            min-height: 70px;
+        }
+        
+        .activity-alerts-container {
+            margin: 2rem 0;
+        }
+        
+        .activity-section, .alerts-section {
+            padding: 1.5rem;
+        }
     }
 </style>
 """, unsafe_allow_html=True)
@@ -277,11 +661,11 @@ def load_sample_data():
     
     # Recent activities
     recent_activities = [
-        {'time': '2 hours ago', 'activity': 'FDA guidance document updated for CardioX', 'type': 'regulatory'},
-        {'time': '4 hours ago', 'activity': 'OncoMax Phase III data analysis completed', 'type': 'clinical'},
-        {'time': '6 hours ago', 'activity': 'NeuroHeal REMS document approved by team', 'type': 'safety'},
-        {'time': '1 day ago', 'activity': 'DiabeSure pricing submission to EU authorities', 'type': 'commercial'},
-        {'time': '2 days ago', 'activity': 'Respira manufacturing site inspection passed', 'type': 'quality'}
+        {'time': '2 hours ago', 'activity': 'FDA guidance document updated for CardioX', 'type': 'regulatory', 'icon': '📋'},
+        {'time': '4 hours ago', 'activity': 'OncoMax Phase III data analysis completed', 'type': 'clinical', 'icon': '🧪'},
+        {'time': '6 hours ago', 'activity': 'NeuroHeal REMS document approved by team', 'type': 'safety', 'icon': '🛡️'},
+        {'time': '1 day ago', 'activity': 'DiabeSure pricing submission to EU authorities', 'type': 'commercial', 'icon': '💼'},
+        {'time': '2 days ago', 'activity': 'Respira manufacturing site inspection passed', 'type': 'quality', 'icon': '✅'}
     ]
     
     # Critical alerts
@@ -297,10 +681,9 @@ def load_sample_data():
 def render_sidebar():
     with st.sidebar:
         st.markdown("""
-        <div style="background: linear-gradient(180deg, #1e3a8a 0%, #3b82f6 100%); padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem; text-align: center;">
-            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🔬</div>
-            <h2 style="color: white; margin: 0; font-size: 1.8rem;">RIA</h2>
-            <p style="color: #bfdbfe; margin: 0.5rem 0 0 0; font-size: 0.9rem;">Regulatory Intelligence Platform</p>
+        <div style="background: linear-gradient(180deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 16px; margin-bottom: 1.5rem; text-align: center;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🔬</div>
+            <h2 style="color: white; margin: 0; font-size: 2rem; font-weight: 800;">RIA</h2>
         </div>
         """, unsafe_allow_html=True)
         
@@ -343,9 +726,8 @@ def render_header(page_title):
             <span>🔬</span>
             <span>RIA</span>
         </div>
-        <div style="margin-left: auto;">
-            <h2 style="margin: 0; font-size: 1.5rem;">{page_title}</h2>
-            <p style="margin: 0; opacity: 0.9; font-size: 0.9rem;">Regulatory Intelligence & Automation Platform</p>
+        <div class="header-fullform">
+            Regulatory Impact Analyzer
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -354,62 +736,61 @@ def render_header(page_title):
 def render_home():
     render_header("Dashboard")
     
-    # Tool sections
-    st.markdown("## 🚀 Platform Tools")
-    
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        if st.button("", key="ria_card", help="Click to launch RIA Detective"):
-            st.session_state.current_page = 'RIA Detective'
-            st.rerun()
-        st.markdown("""
-        <div class="tool-card">
-            <div class="tool-card-content">
-                <h3 style="color: #dc2626; margin-bottom: 1rem;">🕵️ RIA - The Detective</h3>
-                <p><strong>Regulatory Intelligence Analysis</strong></p>
-                <p>AI-powered monitoring and analysis of regulatory updates, guidelines, and changes across global markets.</p>
-                <ul>
+    # Platform Tools Section
+    st.markdown("""
+    <div class="platform-tools-section">
+        <h2 class="section-title">🚀 Platform Tools</h2>
+        <div class="tool-cards-grid">
+            <div class="tool-card ria-card" onclick="">
+                <div class="tool-card-header">
+                    <div class="tool-icon">🕵️</div>
+                    <div class="tool-card-title">
+                        <h3>RIA - The Detective</h3>
+                        <p class="tool-card-subtitle">Regulatory Impact Analyzer</p>
+                    </div>
+                </div>
+                <div class="tool-card-description">
+                    AI-powered monitoring and analysis of regulatory updates, guidelines, and changes across global markets.
+                </div>
+                <ul class="tool-features">
                     <li>📈 Updates Feed</li>
                     <li>🔍 Sources Monitoring</li>
                     <li>📊 Analytics Dashboard</li>
                     <li>🚨 Alert Settings</li>
                 </ul>
             </div>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with col2:
-        if st.button("", key="rise_card", help="Click to launch RISE Guider"):
-            st.session_state.current_page = 'RISE Guider'
-            st.rerun()
-        st.markdown("""
-        <div class="tool-card">
-            <div class="tool-card-content">
-                <h3 style="color: #f59e0b; margin-bottom: 1rem;">🧭 RISE - The Guide</h3>
-                <p><strong>Regulatory Integration & Submission Engine</strong></p>
-                <p>Workflow management and timeline tracking for regulatory submissions and milestone management.</p>
-                <ul>
+            
+            <div class="tool-card rise-card" onclick="">
+                <div class="tool-card-header">
+                    <div class="tool-icon">🧭</div>
+                    <div class="tool-card-title">
+                        <h3>RISE - The Guide</h3>
+                        <p class="tool-card-subtitle">Regulatory Integration & Submission Engine</p>
+                    </div>
+                </div>
+                <div class="tool-card-description">
+                    Workflow management and timeline tracking for regulatory submissions and milestone management.
+                </div>
+                <ul class="tool-features">
                     <li>⚡ Active Workflows</li>
                     <li>📅 Timeline View</li>
                     <li>🔗 Dependencies</li>
                     <li>📋 Reports</li>
                 </ul>
             </div>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with col3:
-        if st.button("", key="prism_card", help="Click to launch PRISM Keeper"):
-            st.session_state.current_page = 'PRISM Keeper'
-            st.rerun()
-        st.markdown("""
-        <div class="tool-card">
-            <div class="tool-card-content">
-                <h3 style="color: #16a34a; margin-bottom: 1rem;">📚 PRISM - The Librarian</h3>
-                <p><strong>Product Regulatory Information & Submission Management</strong></p>
-                <p>Comprehensive product portfolio and regulatory information management system.</p>
-                <ul>
+            
+            <div class="tool-card prism-card" onclick="">
+                <div class="tool-card-header">
+                    <div class="tool-icon">📚</div>
+                    <div class="tool-card-title">
+                        <h3>PRISM - The Librarian</h3>
+                        <p class="tool-card-subtitle">Product Regulatory Information & Submission Management</p>
+                    </div>
+                </div>
+                <div class="tool-card-description">
+                    Comprehensive product portfolio and regulatory information management system.
+                </div>
+                <ul class="tool-features">
                     <li>🧬 Product Portfolio</li>
                     <li>✅ Approvals & Renewals</li>
                     <li>🔄 Variations Tracker</li>
@@ -417,52 +798,64 @@ def render_home():
                 </ul>
             </div>
         </div>
-        """, unsafe_allow_html=True)
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Add clickable functionality with JavaScript
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        if st.button("Launch RIA Detective", use_container_width=True, key="launch_ria"):
+            st.session_state.current_page = 'RIA Detective'
+            st.rerun()
+    with col2:
+        if st.button("Launch RISE Guider", use_container_width=True, key="launch_rise"):
+            st.session_state.current_page = 'RISE Guider'
+            st.rerun()
+    with col3:
+        if st.button("Launch PRISM Keeper", use_container_width=True, key="launch_prism"):
+            st.session_state.current_page = 'PRISM Keeper'
+            st.rerun()
     
     # Recent activity and critical alerts
-    col1, col2 = st.columns(2)
-    
     _, _, recent_activities, critical_alerts = load_sample_data()
     
-    with col1:
-        st.markdown("## 📈 Recent Activity")
-        for activity in recent_activities:
-            activity_types = {
-                'regulatory': '📋', 'clinical': '🧪', 'safety': '🛡️', 
-                'commercial': '💼', 'quality': '✅'
-            }
-            icon = activity_types.get(activity['type'], '📌')
-            
-            st.markdown(f"""
-            <div class="recent-activity">
-                <div style="display: flex; justify-content: between; align-items: center;">
-                    <div>{icon} {activity['activity']}</div>
-                    <small style="color: #6b7280;">{activity['time']}</small>
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
+    st.markdown("""
+    <div class="activity-alerts-container">
+        <div class="activity-section">
+            <h3 class="section-header-title">📈 Recent Activity</h3>
+    """, unsafe_allow_html=True)
     
-    with col2:
-        st.markdown("## 🚨 Critical Alerts")
-        for alert in critical_alerts:
-            priority_colors = {'HIGH': '#dc2626', 'MEDIUM': '#f59e0b', 'LOW': '#16a34a'}
-            priority_color = priority_colors.get(alert['priority'], '#6b7280')
-            
-            st.markdown(f"""
-            <div class="critical-alert">
-                <div style="display: flex; justify-content: between; align-items: start; gap: 1rem;">
-                    <div>
-                        <span style="color: {priority_color}; font-weight: bold;">
-                            ⚠️ {alert['priority']}
-                        </span>
-                        <p style="margin: 0.5rem 0 0 0;">{alert['message']}</p>
-                    </div>
-                    <div style="background: {priority_color}; color: white; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem;">
-                        {alert['deadline']}
-                    </div>
+    for activity in recent_activities:
+        st.markdown(f"""
+            <div class="recent-activity-item">
+                <div class="activity-content">
+                    <span>{activity['icon']}</span>
+                    <span>{activity['activity']}</span>
                 </div>
+                <span class="activity-time">{activity['time']}</span>
             </div>
-            """, unsafe_allow_html=True)
+        """, unsafe_allow_html=True)
+    
+    st.markdown("""
+        </div>
+        <div class="alerts-section">
+            <h3 class="section-header-title">🚨 Critical Alerts</h3>
+    """, unsafe_allow_html=True)
+    
+    for alert in critical_alerts:
+        alert_class = f"alert-{alert['priority'].lower()}"
+        
+        st.markdown(f"""
+            <div class="critical-alert-item {alert_class}">
+                <div class="alert-header">
+                    <span class="alert-priority">⚠️ {alert['priority']} PRIORITY</span>
+                    <span class="alert-deadline">{alert['deadline']}</span>
+                </div>
+                <p class="alert-message">{alert['message']}</p>
+            </div>
+        """, unsafe_allow_html=True)
+    
+    st.markdown("</div></div>", unsafe_allow_html=True)
 
 # RIA Detective page
 def render_ria_detective():
@@ -471,8 +864,8 @@ def render_ria_detective():
     # RIA description section - CORRECTED
     st.markdown("""
     <div class="section-header">
-        <h3 style="margin: 0; color: #1e3a8a;">🕵️ RIA - Regulatory Impact Analyzer</h3>
-        <p style="margin: 0.5rem 0 0 0; color: #64748b;">AI-powered regulatory monitoring and impact analysis system</p>
+        <h3 style="margin: 0; color: var(--text-primary);">🕵️ RIA - Regulatory Impact Analyzer</h3>
+        <p style="margin: 0.5rem 0 0 0; color: var(--text-secondary);">AI-powered regulatory monitoring and impact analysis system</p>
     </div>
     """, unsafe_allow_html=True)
     
@@ -718,8 +1111,8 @@ def render_rise_guider():
     # RISE description
     st.markdown("""
     <div class="section-header">
-        <h3 style="margin: 0; color: #1e3a8a;">🧭 RISE - Regulatory Integration & Submission Engine</h3>
-        <p style="margin: 0.5rem 0 0 0; color: #64748b;">Workflow management and regulatory milestone tracking system</p>
+        <h3 style="margin: 0; color: var(--text-primary);">🧭 RISE - Regulatory Integration & Submission Engine</h3>
+        <p style="margin: 0.5rem 0 0 0; color: var(--text-secondary);">Workflow management and regulatory milestone tracking system</p>
     </div>
     """, unsafe_allow_html=True)
     
@@ -855,8 +1248,8 @@ def render_prism_keeper():
     # PRISM description
     st.markdown("""
     <div class="section-header">
-        <h3 style="margin: 0; color: #1e3a8a;">📚 PRISM - Product Regulatory Information & Submission Management</h3>
-        <p style="margin: 0.5rem 0 0 0; color: #64748b;">Comprehensive product portfolio and regulatory information management</p>
+        <h3 style="margin: 0; color: var(--text-primary);">📚 PRISM - Product Regulatory Information & Submission Management</h3>
+        <p style="margin: 0.5rem 0 0 0; color: var(--text-secondary);">Comprehensive product portfolio and regulatory information management</p>
     </div>
     """, unsafe_allow_html=True)
     
@@ -995,11 +1388,13 @@ def render_prism_keeper():
                             </div>
                             """, unsafe_allow_html=True)
                             
-                            if st.button("💾 Accept AI Changes", key=f"accept_changes_{product['id']}"):
-                                st.success("✅ AI changes have been accepted and document updated!")
-                            
-                            if st.button("❌ Reject Changes", key=f"reject_changes_{product['id']}"):
-                                st.warning("⚠️ AI changes have been rejected. Current document maintained.")
+                            col1, col2 = st.columns(2)
+                            with col1:
+                                if st.button("💾 Accept AI Changes", key=f"accept_changes_{product['id']}"):
+                                    st.success("✅ AI changes have been accepted and document updated!")
+                            with col2:
+                                if st.button("❌ Reject Changes", key=f"reject_changes_{product['id']}"):
+                                    st.warning("⚠️ AI changes have been rejected. Current document maintained.")
     
     elif st.session_state.prism_nav == 'Approvals & Renewals':
         st.markdown("## ✅ Approvals & Renewals")
@@ -1083,13 +1478,13 @@ def main():
     # Footer
     st.markdown("---")
     st.markdown("""
-    <div style="text-align: center; padding: 1.5rem; background: #f8fafc; border-radius: 12px; margin-top: 2rem;">
-        <p style="margin: 0; color: #1e3a8a; font-weight: 600;">
+    <div class="footer">
+        <p style="margin: 0; color: var(--text-primary); font-weight: 600;">
             🔬 <strong>RIA Platform</strong> | 
             Regulatory Intelligence & Automation | 
-            <a href="https://indegene.com" target="_blank" style="color: #3b82f6;">Indegene Solutions</a>
+            <a href="https://indegene.com" target="_blank">Indegene Solutions</a>
         </p>
-        <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: #64748b;">
+        <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: var(--text-secondary);">
             Last Updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | 
             Version: 3.0.0 | 
             Status: 🟢 All Systems Operational
