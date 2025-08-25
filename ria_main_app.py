@@ -14,172 +14,255 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS for professional styling
+# Custom CSS for professional styling with responsive design and dark mode support
 st.markdown("""
 <style>
+    /* CSS Variables for Light and Dark Mode */
+    :root {
+        --bg-primary: #ffffff;
+        --bg-secondary: #f8fafc;
+        --text-primary: #1e293b;
+        --text-secondary: #64748b;
+        --border-color: #e2e8f0;
+        --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        --card-hover-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+    
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --bg-primary: #1e293b;
+            --bg-secondary: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --border-color: #475569;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            --card-hover-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+        }
+    }
+    
+    .stApp {
+        background-color: var(--bg-secondary);
+        color: var(--text-primary);
+    }
+    
+    /* Sticky Header */
     .main-header {
-        background: linear-gradient(90deg, #1e3a8a 0%, #3b82f6 100%);
-        padding: 1.5rem;
-        border-radius: 12px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 1.2rem 2rem;
+        border-radius: 16px;
         color: white;
-        text-align: left;
         margin-bottom: 2rem;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 8px 32px rgba(102, 126, 234, 0.25);
         display: flex;
         align-items: center;
-        gap: 1rem;
+        justify-content: space-between;
     }
     
     .logo-section {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
-        font-size: 2rem;
-        font-weight: bold;
+        gap: 1rem;
+        font-size: 2.2rem;
+        font-weight: 800;
     }
     
-    .tool-card {
-        background: white;
-        border: 1px solid #e5e7eb;
-        border-radius: 12px;
-        padding: 1.5rem;
-        margin: 1rem 0;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    .header-fullform {
+        font-size: 1.4rem;
+        font-weight: 600;
+        opacity: 0.95;
+    }
+    
+    /* Responsive Header */
+    @media (max-width: 768px) {
+        .main-header {
+            flex-direction: column;
+            text-align: center;
+            gap: 0.5rem;
+            padding: 1rem;
+        }
+        
+        .logo-section {
+            font-size: 1.8rem;
+        }
+        
+        .header-fullform {
+            font-size: 1.1rem;
+        }
+    }
+    
+    /* Remove sidebar fullform */
+    .css-1d391kg p {
+        display: none !important;
+    }
+    
+    /* Tool Cards Styling */
+    .tool-card-container {
+        background: var(--bg-primary);
+        border: 2px solid var(--border-color);
+        border-radius: 16px;
+        padding: 2rem;
+        box-shadow: var(--card-shadow);
         transition: all 0.3s ease;
         cursor: pointer;
-        height: 350px;
+        height: 100%;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        min-height: 400px;
+        margin-bottom: 2rem;
     }
     
-    .tool-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-        border-color: #3b82f6;
+    .tool-card-container:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--card-hover-shadow);
+        border-color: #667eea;
     }
     
-    .tool-card h3 {
+    .tool-card-icon {
+        font-size: 3rem;
         margin-bottom: 1rem;
+        display: block;
     }
     
-    .tool-card-content {
+    .tool-card-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: var(--text-primary);
+    }
+    
+    .tool-card-subtitle {
+        font-weight: 600;
+        color: var(--text-secondary);
+        margin-bottom: 1rem;
+        font-size: 1rem;
+    }
+    
+    .tool-card-description {
+        color: var(--text-secondary);
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
         flex-grow: 1;
     }
     
+    .tool-card-features {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .tool-card-features li {
+        margin: 0.5rem 0;
+        color: var(--text-secondary);
+        padding-left: 0.5rem;
+    }
+    
+    /* Color coding for different tools */
+    .ria-card {
+        border-left: 6px solid #dc2626;
+    }
+    .ria-card .tool-card-title {
+        color: #dc2626;
+    }
+    
+    .rise-card {
+        border-left: 6px solid #f59e0b;
+    }
+    .rise-card .tool-card-title {
+        color: #f59e0b;
+    }
+    
+    .prism-card {
+        border-left: 6px solid #16a34a;
+    }
+    .prism-card .tool-card-title {
+        color: #16a34a;
+    }
+    
+    /* Section styling */
     .section-header {
-        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-        padding: 1rem 1.5rem;
-        border-radius: 8px;
-        border-left: 4px solid #3b82f6;
-        margin: 1rem 0;
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin: 2rem 0 1.5rem 0;
+        border-left: 4px solid #667eea;
+        box-shadow: var(--card-shadow);
     }
     
-    .nav-bar {
-        background: #f1f5f9;
+    .section-header h3 {
+        margin: 0;
+        color: var(--text-primary);
+    }
+    
+    .section-header p {
+        margin: 0.5rem 0 0 0;
+        color: var(--text-secondary);
+    }
+    
+    /* Activity and Alerts styling */
+    .activity-section, .alerts-section {
+        background: var(--bg-primary);
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: var(--card-shadow);
+        border: 1px solid var(--border-color);
+        margin-bottom: 2rem;
+    }
+    
+    .section-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 1rem;
+    }
+    
+    .activity-item {
+        background: var(--bg-secondary);
         border-radius: 8px;
-        padding: 0.5rem;
-        margin: 1rem 0;
+        padding: 1rem;
+        margin: 0.5rem 0;
         display: flex;
-        gap: 0.5rem;
+        justify-content: space-between;
+        align-items: center;
+        border: 1px solid var(--border-color);
     }
     
-    .nav-item {
-        padding: 0.5rem 1rem;
-        border-radius: 6px;
-        background: white;
-        border: 1px solid #d1d5db;
-        cursor: pointer;
-        transition: all 0.2s ease;
-    }
-    
-    .nav-item:hover {
-        background: #3b82f6;
-        color: white;
-    }
-    
-    .nav-item.active {
-        background: #3b82f6;
-        color: white;
-    }
-    
-    .filter-section {
-        background: #f8fafc;
-        padding: 1rem;
-        border-radius: 8px;
-        margin: 1rem 0;
-        border: 1px solid #e2e8f0;
-    }
-    
-    .workflow-milestone {
-        background: white;
-        border-left: 4px solid #e5e7eb;
-        padding: 1rem;
-        margin: 0.5rem 0;
-        border-radius: 0 8px 8px 0;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    }
-    
-    .milestone-active {
-        border-left-color: #f59e0b;
-        background: #fffbeb;
-    }
-    
-    .milestone-completed {
-        border-left-color: #16a34a;
-        background: #f0fdf4;
-    }
-    
-    .milestone-pending {
-        border-left-color: #6b7280;
-        background: #f9fafb;
-    }
-    
-    .priority-high { background: #fef2f2; border-left: 4px solid #dc2626; }
-    .priority-medium { background: #fffbeb; border-left: 4px solid #f59e0b; }
-    .priority-low { background: #f0fdf4; border-left: 4px solid #16a34a; }
-    
-    .lifecycle-badge {
-        display: inline-block;
-        padding: 0.25rem 0.75rem;
-        border-radius: 20px;
-        font-size: 0.85rem;
-        font-weight: 600;
-        color: white;
-        margin: 0.25rem;
-    }
-    
-    .rd { background-color: #7c3aed; }
-    .clinical { background-color: #2563eb; }
-    .regulatory { background-color: #dc2626; }
-    .pharmacovigilance { background-color: #ea580c; }
-    .cmc { background-color: #16a34a; }
-    .quality { background-color: #0891b2; }
-    .manufacturing { background-color: #4338ca; }
-    .commercial { background-color: #be123c; }
-    .medical { background-color: #059669; }
-    .corporate { background-color: #374151; }
-    
-    .recent-activity {
-        background: white;
-        border: 1px solid #e5e7eb;
+    .alert-item {
         border-radius: 8px;
         padding: 1rem;
         margin: 0.5rem 0;
+        border-left: 4px solid;
     }
     
-    .critical-alert {
-        background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
-        border: 1px solid #fca5a5;
-        border-radius: 8px;
-        padding: 1rem;
-        margin: 0.5rem 0;
-        animation: pulse 2s infinite;
+    .alert-high {
+        background: linear-gradient(135deg, #fef2f2, #fee2e2);
+        border-color: #dc2626;
+        color: #7f1d1d;
     }
     
+    .alert-medium {
+        background: linear-gradient(135deg, #fffbeb, #fef3c7);
+        border-color: #f59e0b;
+        color: #78350f;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+        .alert-high {
+            background: #1f1717;
+            color: #fca5a5;
+        }
+        
+        .alert-medium {
+            background: #1f1a0d;
+            color: #fcd34d;
+        }
+    }
+    
+    /* Document sections */
     .document-section {
-        background: #f8fafc;
-        border: 1px solid #e2e8f0;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
         border-radius: 8px;
         padding: 1rem;
         margin: 1rem 0;
@@ -189,27 +272,109 @@ st.markdown("""
         background-color: #fef08a;
         padding: 0.2rem 0.4rem;
         border-radius: 4px;
-        font-weight: bold;
+        font-weight: 600;
+        color: #854d0e;
     }
     
     .diff-added {
-        background-color: #dcfce7;
-        border-left: 3px solid #16a34a;
+        background: #dcfce7;
+        border-left: 4px solid #16a34a;
         padding: 0.5rem;
         margin: 0.25rem 0;
+        border-radius: 0 6px 6px 0;
     }
     
     .diff-removed {
-        background-color: #fef2f2;
-        border-left: 3px solid #dc2626;
+        background: #fef2f2;
+        border-left: 4px solid #dc2626;
         padding: 0.5rem;
         margin: 0.25rem 0;
+        border-radius: 0 6px 6px 0;
         text-decoration: line-through;
+        opacity: 0.7;
     }
     
-    @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.8; }
+    @media (prefers-color-scheme: dark) {
+        .highlight-text {
+            background-color: #713f12;
+            color: #fde68a;
+        }
+        
+        .diff-added {
+            background: #14532d;
+            color: #bbf7d0;
+        }
+        
+        .diff-removed {
+            background: #581c1c;
+            color: #fecaca;
+        }
+    }
+    
+    /* Lifecycle badges */
+    .lifecycle-badge {
+        display: inline-block;
+        padding: 0.4rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: white;
+        margin: 0.25rem;
+    }
+    
+    .rd { background: #8b5cf6; }
+    .clinical { background: #3b82f6; }
+    .regulatory { background: #dc2626; }
+    .pharmacovigilance { background: #ea580c; }
+    .cmc { background: #16a34a; }
+    .quality { background: #0891b2; }
+    .manufacturing { background: #4338ca; }
+    .commercial { background: #be123c; }
+    .medical { background: #059669; }
+    .corporate { background: #374151; }
+    
+    /* Workflow milestones */
+    .milestone {
+        background: var(--bg-primary);
+        border-left: 4px solid;
+        padding: 1rem;
+        margin: 0.5rem 0;
+        border-radius: 0 8px 8px 0;
+        box-shadow: var(--card-shadow);
+    }
+    
+    .milestone-completed {
+        border-color: #16a34a;
+        background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+    }
+    
+    .milestone-active {
+        border-color: #f59e0b;
+        background: linear-gradient(135deg, #fffbeb, #fef3c7);
+    }
+    
+    .milestone-pending {
+        border-color: #6b7280;
+        opacity: 0.8;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+        .milestone-completed {
+            background: #14532d;
+            color: #bbf7d0;
+        }
+        
+        .milestone-active {
+            background: #1f1a0d;
+            color: #fcd34d;
+        }
+    }
+    
+    /* Clear float utility */
+    .clearfix::after {
+        content: "";
+        display: table;
+        clear: both;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -235,7 +400,6 @@ if 'show_priority_logic' not in st.session_state:
 # Sample data
 @st.cache_data
 def load_sample_data():
-    # Product data with lifecycle stages
     products_data = [
         {
             'id': 'PRD001', 'name': 'CardioX', 'category': 'Clinical Operations and Medical Affairs',
@@ -269,22 +433,19 @@ def load_sample_data():
         }
     ]
     
-    # Workflow data
     workflow_stages = [
         'Pre-Submission', 'Dossier Preparation', 'Submission Assembly and Dispatch',
         'Regulatory Agency Review', 'Approval & Launch', 'Post Approval'
     ]
     
-    # Recent activities
     recent_activities = [
-        {'time': '2 hours ago', 'activity': 'FDA guidance document updated for CardioX', 'type': 'regulatory'},
-        {'time': '4 hours ago', 'activity': 'OncoMax Phase III data analysis completed', 'type': 'clinical'},
-        {'time': '6 hours ago', 'activity': 'NeuroHeal REMS document approved by team', 'type': 'safety'},
-        {'time': '1 day ago', 'activity': 'DiabeSure pricing submission to EU authorities', 'type': 'commercial'},
-        {'time': '2 days ago', 'activity': 'Respira manufacturing site inspection passed', 'type': 'quality'}
+        {'time': '2 hours ago', 'activity': 'FDA guidance document updated for CardioX', 'type': 'regulatory', 'icon': '📋'},
+        {'time': '4 hours ago', 'activity': 'OncoMax Phase III data analysis completed', 'type': 'clinical', 'icon': '🧪'},
+        {'time': '6 hours ago', 'activity': 'NeuroHeal REMS document approved by team', 'type': 'safety', 'icon': '🛡️'},
+        {'time': '1 day ago', 'activity': 'DiabeSure pricing submission to EU authorities', 'type': 'commercial', 'icon': '💼'},
+        {'time': '2 days ago', 'activity': 'Respira manufacturing site inspection passed', 'type': 'quality', 'icon': '✅'}
     ]
     
-    # Critical alerts
     critical_alerts = [
         {'priority': 'HIGH', 'message': 'FDA requires immediate response for CardioX safety update', 'deadline': '3 days'},
         {'priority': 'MEDIUM', 'message': 'EMA requesting additional OncoMax clinical data', 'deadline': '14 days'},
@@ -297,14 +458,12 @@ def load_sample_data():
 def render_sidebar():
     with st.sidebar:
         st.markdown("""
-        <div style="background: linear-gradient(180deg, #1e3a8a 0%, #3b82f6 100%); padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem; text-align: center;">
-            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🔬</div>
-            <h2 style="color: white; margin: 0; font-size: 1.8rem;">RIA</h2>
-            <p style="color: #bfdbfe; margin: 0.5rem 0 0 0; font-size: 0.9rem;">Regulatory Intelligence Platform</p>
+        <div style="background: linear-gradient(180deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 16px; margin-bottom: 1.5rem; text-align: center;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🔬</div>
+            <h2 style="color: white; margin: 0; font-size: 2rem; font-weight: 800;">RIA</h2>
         </div>
         """, unsafe_allow_html=True)
         
-        # Navigation menu
         pages = ['🏠 Home', '🕵️ RIA Detective', '🧭 RISE Guider', '📚 PRISM Keeper']
         
         for page in pages:
@@ -315,7 +474,6 @@ def render_sidebar():
         
         st.markdown("---")
         
-        # Additional sections
         if st.button("🔔 Notifications", use_container_width=True):
             st.info("Notifications panel opened")
         
@@ -324,7 +482,6 @@ def render_sidebar():
         
         st.markdown("---")
         
-        # Quick stats
         st.markdown("### 📊 Quick Stats")
         col1, col2 = st.columns(2)
         with col1:
@@ -343,140 +500,144 @@ def render_header(page_title):
             <span>🔬</span>
             <span>RIA</span>
         </div>
-        <div style="margin-left: auto;">
-            <h2 style="margin: 0; font-size: 1.5rem;">{page_title}</h2>
-            <p style="margin: 0; opacity: 0.9; font-size: 0.9rem;">Regulatory Intelligence & Automation Platform</p>
+        <div class="header-fullform">
+            Regulatory Impact Analyzer
         </div>
     </div>
     """, unsafe_allow_html=True)
 
-# Home page
+# Home page with properly rendered cards using containers
 def render_home():
     render_header("Dashboard")
     
-    # Tool sections
+    # Platform Tools Section
     st.markdown("## 🚀 Platform Tools")
     
-    col1, col2, col3 = st.columns(3)
+    # Create three columns for the tool cards
+    col1, col2, col3 = st.columns(3, gap="large")
     
     with col1:
-        if st.button("", key="ria_card", help="Click to launch RIA Detective"):
+        # RIA Card using container to prevent overlap
+        with st.container():
+            st.markdown('<div class="tool-card-container ria-card">', unsafe_allow_html=True)
+            st.markdown('<div class="tool-card-icon">🕵️</div>', unsafe_allow_html=True)
+            st.markdown('<h3 class="tool-card-title">RIA - The Detective</h3>', unsafe_allow_html=True)
+            st.markdown('<p class="tool-card-subtitle">Regulatory Impact Analyzer</p>', unsafe_allow_html=True)
+            st.markdown('<p class="tool-card-description">AI-powered monitoring and analysis of regulatory updates, guidelines, and changes across global markets.</p>', unsafe_allow_html=True)
+            st.markdown('''
+            <ul class="tool-card-features">
+                <li>📈 Updates Feed</li>
+                <li>🔍 Sources Monitoring</li>
+                <li>📊 Analytics Dashboard</li>
+                <li>🚨 Alert Settings</li>
+            </ul>
+            ''', unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
+        
+        if st.button("Launch RIA Detective", use_container_width=True, key="launch_ria", type="primary"):
             st.session_state.current_page = 'RIA Detective'
             st.rerun()
-        st.markdown("""
-        <div class="tool-card">
-            <div class="tool-card-content">
-                <h3 style="color: #dc2626; margin-bottom: 1rem;">🕵️ RIA - The Detective</h3>
-                <p><strong>Regulatory Intelligence Analysis</strong></p>
-                <p>AI-powered monitoring and analysis of regulatory updates, guidelines, and changes across global markets.</p>
-                <ul>
-                    <li>📈 Updates Feed</li>
-                    <li>🔍 Sources Monitoring</li>
-                    <li>📊 Analytics Dashboard</li>
-                    <li>🚨 Alert Settings</li>
-                </ul>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
     
     with col2:
-        if st.button("", key="rise_card", help="Click to launch RISE Guider"):
+        # RISE Card using container to prevent overlap
+        with st.container():
+            st.markdown('<div class="tool-card-container rise-card">', unsafe_allow_html=True)
+            st.markdown('<div class="tool-card-icon">🧭</div>', unsafe_allow_html=True)
+            st.markdown('<h3 class="tool-card-title">RISE - The Guide</h3>', unsafe_allow_html=True)
+            st.markdown('<p class="tool-card-subtitle">Regulatory Integration & Submission Engine</p>', unsafe_allow_html=True)
+            st.markdown('<p class="tool-card-description">Workflow management and timeline tracking for regulatory submissions and milestone management.</p>', unsafe_allow_html=True)
+            st.markdown('''
+            <ul class="tool-card-features">
+                <li>⚡ Active Workflows</li>
+                <li>📅 Timeline View</li>
+                <li>🔗 Dependencies</li>
+                <li>📋 Reports</li>
+            </ul>
+            ''', unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
+        
+        if st.button("Launch RISE Guider", use_container_width=True, key="launch_rise", type="primary"):
             st.session_state.current_page = 'RISE Guider'
             st.rerun()
-        st.markdown("""
-        <div class="tool-card">
-            <div class="tool-card-content">
-                <h3 style="color: #f59e0b; margin-bottom: 1rem;">🧭 RISE - The Guide</h3>
-                <p><strong>Regulatory Integration & Submission Engine</strong></p>
-                <p>Workflow management and timeline tracking for regulatory submissions and milestone management.</p>
-                <ul>
-                    <li>⚡ Active Workflows</li>
-                    <li>📅 Timeline View</li>
-                    <li>🔗 Dependencies</li>
-                    <li>📋 Reports</li>
-                </ul>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
     
     with col3:
-        if st.button("", key="prism_card", help="Click to launch PRISM Keeper"):
+        # PRISM Card using container to prevent overlap
+        with st.container():
+            st.markdown('<div class="tool-card-container prism-card">', unsafe_allow_html=True)
+            st.markdown('<div class="tool-card-icon">📚</div>', unsafe_allow_html=True)
+            st.markdown('<h3 class="tool-card-title">PRISM - The Librarian</h3>', unsafe_allow_html=True)
+            st.markdown('<p class="tool-card-subtitle">Product Regulatory Information & Submission Management</p>', unsafe_allow_html=True)
+            st.markdown('<p class="tool-card-description">Comprehensive product portfolio and regulatory information management system.</p>', unsafe_allow_html=True)
+            st.markdown('''
+            <ul class="tool-card-features">
+                <li>🧬 Product Portfolio</li>
+                <li>✅ Approvals & Renewals</li>
+                <li>🔄 Variations Tracker</li>
+                <li>📊 Compliance Dashboard</li>
+            </ul>
+            ''', unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
+        
+        if st.button("Launch PRISM Keeper", use_container_width=True, key="launch_prism", type="primary"):
             st.session_state.current_page = 'PRISM Keeper'
             st.rerun()
-        st.markdown("""
-        <div class="tool-card">
-            <div class="tool-card-content">
-                <h3 style="color: #16a34a; margin-bottom: 1rem;">📚 PRISM - The Librarian</h3>
-                <p><strong>Product Regulatory Information & Submission Management</strong></p>
-                <p>Comprehensive product portfolio and regulatory information management system.</p>
-                <ul>
-                    <li>🧬 Product Portfolio</li>
-                    <li>✅ Approvals & Renewals</li>
-                    <li>🔄 Variations Tracker</li>
-                    <li>📊 Compliance Dashboard</li>
-                </ul>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
+    
+    # Add clear separator before next section
+    st.markdown('<div class="clearfix"></div>', unsafe_allow_html=True)
+    st.markdown("---")
     
     # Recent activity and critical alerts
-    col1, col2 = st.columns(2)
-    
     _, _, recent_activities, critical_alerts = load_sample_data()
     
+    col1, col2 = st.columns(2, gap="large")
+    
     with col1:
-        st.markdown("## 📈 Recent Activity")
-        for activity in recent_activities:
-            activity_types = {
-                'regulatory': '📋', 'clinical': '🧪', 'safety': '🛡️', 
-                'commercial': '💼', 'quality': '✅'
-            }
-            icon = activity_types.get(activity['type'], '📌')
-            
-            st.markdown(f"""
-            <div class="recent-activity">
-                <div style="display: flex; justify-content: between; align-items: center;">
-                    <div>{icon} {activity['activity']}</div>
-                    <small style="color: #6b7280;">{activity['time']}</small>
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
+        st.markdown("### 📈 Recent Activity")
+        with st.container():
+            for activity in recent_activities:
+                st.markdown(f"""
+                    <div class="activity-item">
+                        <div>
+                            <span>{activity['icon']}</span>
+                            <span style="margin-left: 0.5rem;">{activity['activity']}</span>
+                        </div>
+                        <small style="color: var(--text-secondary);">{activity['time']}</small>
+                    </div>
+                """, unsafe_allow_html=True)
     
     with col2:
-        st.markdown("## 🚨 Critical Alerts")
-        for alert in critical_alerts:
-            priority_colors = {'HIGH': '#dc2626', 'MEDIUM': '#f59e0b', 'LOW': '#16a34a'}
-            priority_color = priority_colors.get(alert['priority'], '#6b7280')
-            
-            st.markdown(f"""
-            <div class="critical-alert">
-                <div style="display: flex; justify-content: between; align-items: start; gap: 1rem;">
-                    <div>
-                        <span style="color: {priority_color}; font-weight: bold;">
-                            ⚠️ {alert['priority']}
-                        </span>
-                        <p style="margin: 0.5rem 0 0 0;">{alert['message']}</p>
+        st.markdown("### 🚨 Critical Alerts")
+        with st.container():
+            for alert in critical_alerts:
+                alert_class = f"alert-{alert['priority'].lower()}"
+                
+                st.markdown(f"""
+                    <div class="alert-item {alert_class}">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;">
+                            <div>
+                                <div style="font-weight: bold; margin-bottom: 0.5rem;">
+                                    ⚠️ {alert['priority']} PRIORITY
+                                </div>
+                                <div>{alert['message']}</div>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.1); padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.8rem; font-weight: 600; white-space: nowrap;">
+                                {alert['deadline']}
+                            </div>
+                        </div>
                     </div>
-                    <div style="background: {priority_color}; color: white; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.8rem;">
-                        {alert['deadline']}
-                    </div>
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
+                """, unsafe_allow_html=True)
 
-# RIA Detective page
+# RIA Detective page with fixed document rendering
 def render_ria_detective():
     render_header("RIA Detective")
     
-    # RIA description section - CORRECTED
     st.markdown("""
     <div class="section-header">
-        <h3 style="margin: 0; color: #1e3a8a;">🕵️ RIA - Regulatory Impact Analyzer</h3>
-        <p style="margin: 0.5rem 0 0 0; color: #64748b;">AI-powered regulatory monitoring and impact analysis system</p>
+        <h3>🕵️ RIA - Regulatory Impact Analyzer</h3>
+        <p>AI-powered regulatory monitoring and impact analysis system</p>
     </div>
     """, unsafe_allow_html=True)
     
-    # Navigation bar
     nav_options = ['Updates Feed', 'Sources', 'Analytics', 'Alert Settings']
     cols = st.columns(len(nav_options))
     
@@ -485,7 +646,6 @@ def render_ria_detective():
             if st.button(option, use_container_width=True, key=f"ria_nav_{option}"):
                 st.session_state.ria_nav = option
     
-    # Filters section
     st.markdown("### 🔍 Filters")
     col1, col2, col3, col4, col5 = st.columns([2, 1, 1, 1, 1])
     
@@ -500,11 +660,9 @@ def render_ria_detective():
     with col5:
         type_filter = st.selectbox("Types", ["All Types", "Guidance", "Safety", "Labeling", "Manufacturing"])
     
-    # Content based on navigation
     if st.session_state.ria_nav == 'Updates Feed':
         st.markdown("## 📈 Regulatory Updates")
         
-        # Sample regulatory updates
         updates = [
             {
                 'id': 'update_1',
@@ -531,8 +689,6 @@ def render_ria_detective():
         ]
         
         for update in updates:
-            priority_class = f"priority-{update['priority'].lower()}"
-            
             with st.expander(f"{update['title']} - {update['priority']} Priority"):
                 col1, col2 = st.columns(2)
                 
@@ -553,7 +709,6 @@ def render_ria_detective():
                 
                 st.markdown(f"**Summary:** {update['summary']}")
                 
-                # Action buttons
                 col1, col2, col3, col4 = st.columns(4)
                 
                 with col1:
@@ -578,7 +733,7 @@ def render_ria_detective():
                     st.info(f"**Document URL:** {update['source_url']}")
                     st.markdown("**Document Summary:** This guidance document provides updated requirements for diabetes drug labeling with emphasis on cardiovascular risk assessment and disclosure requirements.")
                 
-                # Show external comparison
+                # Show external comparison using text formatting
                 if st.session_state.show_external_comparison == update['id']:
                     st.markdown("### 🔄 External Comparison")
                     col1, col2 = st.columns(2)
@@ -601,63 +756,63 @@ def render_ria_detective():
                         - **Updated contraindications list** ⚠️
                         """)
                 
-                # Show AI modified document
+                # Show AI modified document using safe components
                 if st.session_state.show_ai_document == update['id']:
                     st.markdown("### 🤖 AI Modified Document")
-                    st.markdown("""
-                    <div class="document-section">
-                        <h4>DiabeSure Product Labeling - Updated Version</h4>
-                        
-                        <h5>Section 5: WARNINGS AND PRECAUTIONS</h5>
-                        
-                        <div class="diff-added">
-                        <strong>5.1 CARDIOVASCULAR RISK ASSESSMENT (NEW)</strong><br>
-                        Prior to initiating DiabeSure therapy, conduct comprehensive cardiovascular risk assessment including:
-                        - Baseline ECG evaluation
-                        - Assessment of cardiovascular risk factors
-                        - Patient history of cardiac events
-                        </div>
-                        
-                        <div class="diff-removed">
-                        5.1 General Safety Information
-                        Standard diabetes medication precautions apply.
-                        </div>
-                        
-                        <div class="diff-added">
-                        <strong>5.2 CARDIAC MONITORING REQUIREMENTS (NEW)</strong><br>
-                        Regular cardiac monitoring is required for patients with:
-                        - Pre-existing cardiovascular conditions
-                        - Age > 65 years
-                        - Multiple cardiovascular risk factors
-                        </div>
-                        
-                        <h5>Section 17: PATIENT COUNSELING INFORMATION</h5>
-                        
-                        <div class="diff-added">
-                        <strong>17.3 CARDIOVASCULAR RISK COUNSELING (NEW)</strong><br>
-                        Inform patients about potential cardiovascular risks and advise to:
-                        - Report chest pain, shortness of breath, or palpitations immediately
-                        - Maintain regular cardiac monitoring appointments
-                        - Understand signs and symptoms of cardiac events
-                        </div>
-                    </div>
-                    """, unsafe_allow_html=True)
+                    st.markdown("#### DiabeSure Product Labeling - Updated Version")
+                    st.markdown("##### Section 5: WARNINGS AND PRECAUTIONS")
+                    
+                    # Added content
+                    st.success("""
+                    **5.1 CARDIOVASCULAR RISK ASSESSMENT (NEW)**  
+                    Prior to initiating DiabeSure therapy, conduct comprehensive cardiovascular risk assessment including:
+                    - Baseline ECG evaluation
+                    - Assessment of cardiovascular risk factors  
+                    - Patient history of cardiac events
+                    """)
+                    
+                    # Removed content
+                    st.error("""
+                    ~~5.1 General Safety Information~~  
+                    ~~Standard diabetes medication precautions apply.~~
+                    """)
+                    
+                    # Additional new content
+                    st.success("""
+                    **5.2 CARDIAC MONITORING REQUIREMENTS (NEW)**  
+                    Regular cardiac monitoring is required for patients with:
+                    - Pre-existing cardiovascular conditions
+                    - Age > 65 years
+                    - Multiple cardiovascular risk factors
+                    """)
+                    
+                    st.markdown("##### Section 17: PATIENT COUNSELING INFORMATION")
+                    
+                    st.success("""
+                    **17.3 CARDIOVASCULAR RISK COUNSELING (NEW)**  
+                    Inform patients about potential cardiovascular risks and advise to:
+                    - Report chest pain, shortness of breath, or palpitations immediately
+                    - Maintain regular cardiac monitoring appointments
+                    - Understand signs and symptoms of cardiac events
+                    """)
                 
                 # Show priority logic
                 if st.session_state.show_priority_logic == update['id']:
                     st.markdown("### ⚡ Priority Determination Logic")
-                    st.markdown("""
-                    **Priority Score: HIGH (85/100)**
+                    st.markdown("**Priority Score: HIGH (85/100)**")
                     
-                    **Scoring Factors:**
-                    - Regulatory Authority Impact: FDA (25/25) ✅
-                    - Product Impact: DiabeSure directly affected (20/20) ✅
-                    - Timeline Urgency: 30 days implementation (15/20) ⚠️
-                    - Business Impact: Major labeling changes required (20/25) ⚠️
-                    - Compliance Risk: High non-compliance penalty (15/15) ✅
+                    st.markdown("**Scoring Factors:**")
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        st.success("- Regulatory Authority Impact: FDA (25/25) ✅")
+                        st.success("- Product Impact: DiabeSure directly affected (20/20) ✅")
+                        st.success("- Compliance Risk: High non-compliance penalty (15/15) ✅")
                     
-                    **Recommendation:** Immediate action required for compliance team
-                    """)
+                    with col2:
+                        st.warning("- Timeline Urgency: 30 days implementation (15/20) ⚠️")
+                        st.warning("- Business Impact: Major labeling changes required (20/25) ⚠️")
+                    
+                    st.info("**Recommendation:** Immediate action required for compliance team")
     
     elif st.session_state.ria_nav == 'Sources':
         st.markdown("## 🔍 Source Monitoring")
@@ -678,7 +833,6 @@ def render_ria_detective():
         col1, col2 = st.columns(2)
         
         with col1:
-            # Updates by source chart
             source_counts = [15, 8, 5, 3, 2, 1]
             sources = ['FDA', 'EMA', 'CDSCO', 'PMDA', 'Health Canada', 'TGA']
             
@@ -686,7 +840,6 @@ def render_ria_detective():
             st.plotly_chart(fig, use_container_width=True)
         
         with col2:
-            # Priority distribution
             priorities = ['HIGH', 'MEDIUM', 'LOW']
             priority_counts = [5, 12, 18]
             
@@ -715,15 +868,13 @@ def render_ria_detective():
 def render_rise_guider():
     render_header("RISE Guider")
     
-    # RISE description
     st.markdown("""
     <div class="section-header">
-        <h3 style="margin: 0; color: #1e3a8a;">🧭 RISE - Regulatory Integration & Submission Engine</h3>
-        <p style="margin: 0.5rem 0 0 0; color: #64748b;">Workflow management and regulatory milestone tracking system</p>
+        <h3>🧭 RISE - Regulatory Integration & Submission Engine</h3>
+        <p>Workflow management and regulatory milestone tracking system</p>
     </div>
     """, unsafe_allow_html=True)
     
-    # Navigation
     nav_options = ['Active Workflows', 'Timeline View', 'Dependencies', 'Reports']
     cols = st.columns(len(nav_options))
     
@@ -738,7 +889,6 @@ def render_rise_guider():
     if st.session_state.rise_nav == 'Active Workflows':
         st.markdown("## ⚡ Active Workflows")
         
-        # Product and region selector - DiabeSure as default
         col1, col2 = st.columns(2)
         with col1:
             diabesure_index = product_names.index('DiabeSure') if 'DiabeSure' in product_names else 0
@@ -746,34 +896,32 @@ def render_rise_guider():
         with col2:
             selected_region = st.selectbox("Select Region", ["US", "EU", "Japan", "India", "China"])
         
-        # Workflow stages with current status
         st.markdown(f"### 📋 Workflow Milestones - {selected_product} ({selected_region})")
         
-        # Sample current stage (would be dynamic in real implementation)
-        current_stage_index = 2  # Submission Assembly and Dispatch
+        current_stage_index = 2
         
         for i, stage in enumerate(workflow_stages):
             if i < current_stage_index:
                 status_class = "milestone-completed"
                 status_icon = "✅"
+                status_text = "Completed"
             elif i == current_stage_index:
                 status_class = "milestone-active"
                 status_icon = "🔄"
+                status_text = "In Progress"
             else:
                 status_class = "milestone-pending"
                 status_icon = "⏳"
+                status_text = "Pending"
             
-            # RIA impact analysis
             ria_impact = ""
             if stage == "Dossier Preparation" and selected_product == "DiabeSure":
                 ria_impact = "⚠️ HIGH Priority: FDA labeling changes detected - requires immediate update"
-            elif stage == "Regulatory Agency Review" and selected_product == "CardioX":
-                ria_impact = "📋 MEDIUM Priority: EMA cardiovascular assessment updates may affect timeline"
             
             st.markdown(f"""
-            <div class="workflow-milestone {status_class}">
+            <div class="milestone {status_class}">
                 <h4>{status_icon} {stage}</h4>
-                <p>Status: {'Completed' if i < current_stage_index else 'In Progress' if i == current_stage_index else 'Pending'}</p>
+                <p>Status: {status_text}</p>
                 {f'<div style="color: #dc2626; font-weight: bold; margin-top: 0.5rem;">{ria_impact}</div>' if ria_impact else ''}
             </div>
             """, unsafe_allow_html=True)
@@ -781,7 +929,6 @@ def render_rise_guider():
     elif st.session_state.rise_nav == 'Timeline View':
         st.markdown("## 📅 Timeline View")
         
-        # Timeline visualization
         fig = go.Figure()
         
         stages_timeline = [
@@ -852,15 +999,13 @@ def render_rise_guider():
 def render_prism_keeper():
     render_header("PRISM Keeper")
     
-    # PRISM description
     st.markdown("""
     <div class="section-header">
-        <h3 style="margin: 0; color: #1e3a8a;">📚 PRISM - Product Regulatory Information & Submission Management</h3>
-        <p style="margin: 0.5rem 0 0 0; color: #64748b;">Comprehensive product portfolio and regulatory information management</p>
+        <h3>📚 PRISM - Product Regulatory Information & Submission Management</h3>
+        <p>Comprehensive product portfolio and regulatory information management</p>
     </div>
     """, unsafe_allow_html=True)
     
-    # Navigation
     nav_options = ['Product Portfolio', 'Approvals & Renewals', 'Variations Tracker', 'Compliance Dashboard']
     cols = st.columns(len(nav_options))
     
@@ -874,7 +1019,6 @@ def render_prism_keeper():
     if st.session_state.prism_nav == 'Product Portfolio':
         st.markdown("## 🧬 Product Portfolio")
         
-        # Lifecycle stages
         lifecycle_stages = {
             'R&D': 'rd',
             'Clinical Operations and Medical Affairs': 'clinical',
@@ -888,7 +1032,6 @@ def render_prism_keeper():
             'Corporate and Strategic Functions': 'corporate'
         }
         
-        # Group products by category
         grouped_products = {}
         for product in products_data:
             category = product['category']
@@ -920,7 +1063,6 @@ def render_prism_keeper():
                         for variation in product['variations']:
                             st.markdown(f"• {variation}")
                     
-                    # Add document comparison for DiabeSure in Regulatory Affairs
                     if product['name'] == 'DiabeSure':
                         st.markdown("---")
                         st.markdown("### 📄 Document Management")
@@ -935,71 +1077,76 @@ def render_prism_keeper():
                             if st.button("🤖 AI Updated Document", key=f"ai_updated_doc_{product['id']}"):
                                 st.session_state[f"show_ai_updated_{product['id']}"] = True
                         
-                        # Show current document
                         if st.session_state.get(f"show_current_{product['id']}", False):
                             st.markdown("#### 📋 Current DiabeSure Labeling Document")
-                            st.markdown("""
-                            <div class="document-section">
-                                <h5>Section 5: WARNINGS AND PRECAUTIONS</h5>
-                                <p><strong>5.1 General Safety Information</strong><br>
-                                Standard diabetes medication precautions apply. Monitor blood glucose levels regularly.</p>
+                            
+                            with st.container():
+                                st.markdown("##### Section 5: WARNINGS AND PRECAUTIONS")
+                                st.info("""
+                                **5.1 General Safety Information**  
+                                Standard diabetes medication precautions apply. Monitor blood glucose levels regularly.
                                 
-                                <p><strong>5.2 Hypoglycemia Risk</strong><br>
-                                Risk of hypoglycemia, especially when combined with other antidiabetic agents.</p>
+                                **5.2 Hypoglycemia Risk**  
+                                Risk of hypoglycemia, especially when combined with other antidiabetic agents.
+                                """)
                                 
-                                <h5>Section 17: PATIENT COUNSELING INFORMATION</h5>
-                                <p><strong>17.1 General Information</strong><br>
-                                Inform patients about proper administration and monitoring requirements.</p>
+                                st.markdown("##### Section 17: PATIENT COUNSELING INFORMATION")
+                                st.info("""
+                                **17.1 General Information**  
+                                Inform patients about proper administration and monitoring requirements.
                                 
-                                <p><strong>17.2 Side Effects</strong><br>
-                                Discuss common side effects and when to contact healthcare provider.</p>
-                            </div>
-                            """, unsafe_allow_html=True)
+                                **17.2 Side Effects**  
+                                Discuss common side effects and when to contact healthcare provider.
+                                """)
                         
-                        # Show AI updated document with highlights
                         if st.session_state.get(f"show_ai_updated_{product['id']}", False):
                             st.markdown("#### 🤖 AI Updated DiabeSure Labeling Document")
-                            st.markdown("""
-                            <div class="document-section">
-                                <h5>Section 5: WARNINGS AND PRECAUTIONS</h5>
-                                
-                                <div class="diff-added">
-                                <p><strong>5.1 CARDIOVASCULAR RISK ASSESSMENT (UPDATED)</strong><br>
-                                <span class="highlight-text">Prior to initiating DiabeSure therapy, conduct comprehensive cardiovascular risk assessment including baseline ECG evaluation, assessment of cardiovascular risk factors, and patient history of cardiac events.</span></p>
-                                </div>
-                                
-                                <div class="diff-removed">
-                                <p><strong>5.1 General Safety Information</strong><br>
-                                Standard diabetes medication precautions apply. Monitor blood glucose levels regularly.</p>
-                                </div>
-                                
-                                <p><strong>5.2 Hypoglycemia Risk</strong><br>
-                                Risk of hypoglycemia, especially when combined with other antidiabetic agents.</p>
-                                
-                                <div class="diff-added">
-                                <p><strong>5.3 CARDIAC MONITORING REQUIREMENTS (NEW)</strong><br>
-                                <span class="highlight-text">Regular cardiac monitoring is required for patients with pre-existing cardiovascular conditions, age > 65 years, or multiple cardiovascular risk factors.</span></p>
-                                </div>
-                                
-                                <h5>Section 17: PATIENT COUNSELING INFORMATION</h5>
-                                <p><strong>17.1 General Information</strong><br>
-                                Inform patients about proper administration and monitoring requirements.</p>
-                                
-                                <p><strong>17.2 Side Effects</strong><br>
-                                Discuss common side effects and when to contact healthcare provider.</p>
-                                
-                                <div class="diff-added">
-                                <p><strong>17.3 CARDIOVASCULAR RISK COUNSELING (NEW)</strong><br>
-                                <span class="highlight-text">Inform patients about potential cardiovascular risks and advise to report chest pain, shortness of breath, or palpitations immediately. Maintain regular cardiac monitoring appointments and understand signs and symptoms of cardiac events.</span></p>
-                                </div>
-                            </div>
-                            """, unsafe_allow_html=True)
                             
-                            if st.button("💾 Accept AI Changes", key=f"accept_changes_{product['id']}"):
-                                st.success("✅ AI changes have been accepted and document updated!")
+                            with st.container():
+                                st.markdown("##### Section 5: WARNINGS AND PRECAUTIONS")
+                                
+                                st.success("""
+                                **5.1 CARDIOVASCULAR RISK ASSESSMENT (UPDATED)**  
+                                Prior to initiating DiabeSure therapy, conduct comprehensive cardiovascular risk assessment including baseline ECG evaluation, assessment of cardiovascular risk factors, and patient history of cardiac events.
+                                """)
+                                
+                                st.error("""
+                                ~~**5.1 General Safety Information**~~  
+                                ~~Standard diabetes medication precautions apply. Monitor blood glucose levels regularly.~~
+                                """)
+                                
+                                st.info("""
+                                **5.2 Hypoglycemia Risk**  
+                                Risk of hypoglycemia, especially when combined with other antidiabetic agents.
+                                """)
+                                
+                                st.success("""
+                                **5.3 CARDIAC MONITORING REQUIREMENTS (NEW)**  
+                                Regular cardiac monitoring is required for patients with pre-existing cardiovascular conditions, age > 65 years, or multiple cardiovascular risk factors.
+                                """)
+                                
+                                st.markdown("##### Section 17: PATIENT COUNSELING INFORMATION")
+                                
+                                st.info("""
+                                **17.1 General Information**  
+                                Inform patients about proper administration and monitoring requirements.
+                                
+                                **17.2 Side Effects**  
+                                Discuss common side effects and when to contact healthcare provider.
+                                """)
+                                
+                                st.success("""
+                                **17.3 CARDIOVASCULAR RISK COUNSELING (NEW)**  
+                                Inform patients about potential cardiovascular risks and advise to report chest pain, shortness of breath, or palpitations immediately. Maintain regular cardiac monitoring appointments and understand signs and symptoms of cardiac events.
+                                """)
                             
-                            if st.button("❌ Reject Changes", key=f"reject_changes_{product['id']}"):
-                                st.warning("⚠️ AI changes have been rejected. Current document maintained.")
+                            col1, col2 = st.columns(2)
+                            with col1:
+                                if st.button("💾 Accept AI Changes", key=f"accept_changes_{product['id']}", type="primary"):
+                                    st.success("✅ AI changes have been accepted and document updated!")
+                            with col2:
+                                if st.button("❌ Reject Changes", key=f"reject_changes_{product['id']}", type="secondary"):
+                                    st.warning("⚠️ AI changes have been rejected. Current document maintained.")
     
     elif st.session_state.prism_nav == 'Approvals & Renewals':
         st.markdown("## ✅ Approvals & Renewals")
@@ -1016,7 +1163,6 @@ def render_prism_keeper():
         df = pd.DataFrame(approvals_data)
         st.dataframe(df, use_container_width=True)
         
-        # Renewal timeline
         st.markdown("### 📅 Upcoming Renewals")
         renewal_products = ['CardioX (US)', 'NeuroHeal (EU)', 'DiabeSure (US)']
         renewal_dates = ['2029-12-15', '2029-11-20', '2028-08-10']
@@ -1040,7 +1186,6 @@ def render_prism_keeper():
         df = pd.DataFrame(variations_data)
         st.dataframe(df, use_container_width=True)
         
-        # Status distribution
         status_counts = df['Status'].value_counts()
         fig = px.pie(values=status_counts.values, names=status_counts.index, title="Variation Status Distribution")
         st.plotly_chart(fig, use_container_width=True)
@@ -1059,7 +1204,6 @@ def render_prism_keeper():
         with col4:
             st.metric("Pending Actions", "8", delta="-2")
         
-        # Compliance by region
         regions = ['US', 'EU', 'Japan', 'India', 'China']
         compliance_scores = [99.1, 98.5, 97.8, 96.9, 95.2]
         
@@ -1082,14 +1226,14 @@ def main():
     
     # Footer
     st.markdown("---")
-    st.markdown("""
-    <div style="text-align: center; padding: 1.5rem; background: #f8fafc; border-radius: 12px; margin-top: 2rem;">
-        <p style="margin: 0; color: #1e3a8a; font-weight: 600;">
+    st.markdown(f"""
+    <div style="text-align: center; padding: 2rem; background: var(--bg-primary); border-radius: 12px; margin-top: 2rem; border: 1px solid var(--border-color);">
+        <p style="margin: 0; color: var(--text-primary); font-weight: 600;">
             🔬 <strong>RIA Platform</strong> | 
             Regulatory Intelligence & Automation | 
-            <a href="https://indegene.com" target="_blank" style="color: #3b82f6;">Indegene Solutions</a>
+            <a href="https://indegene.com" target="_blank" style="color: #667eea;">Indegene Solutions</a>
         </p>
-        <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: #64748b;">
+        <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: var(--text-secondary);">
             Last Updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | 
             Version: 3.0.0 | 
             Status: 🟢 All Systems Operational
