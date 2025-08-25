@@ -549,15 +549,15 @@ def render_header(page_title):
     </div>
     """, unsafe_allow_html=True)
 
-# Home page with properly rendered cards using HTML structure
-# Home page with properly rendered cards using HTML structure
+# Replace the render_home function's tool cards section with this corrected version:
+
 def render_home():
     render_header("Dashboard")
     
     # Platform Tools Section
     st.markdown("## 🚀 Platform Tools")
     
-    # Create HTML structure for the tool cards
+    # Create HTML structure for the tool cards - FIXED VERSION
     st.markdown("""
     <div class="tools-section">
         <div class="tools-grid">
