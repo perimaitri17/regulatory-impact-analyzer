@@ -8,8 +8,8 @@ import time
 
 # Page config
 st.set_page_config(
-    page_title="RIA Platform",
-    page_icon="🔬",
+    page_title="AURA Platform",
+    page_icon="🤖",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -95,7 +95,19 @@ st.markdown("""
         display: none !important;
     }
     
-    /* Tool Cards Styling */
+    /* Tool Cards Container - Fixed Layout */
+    .tools-section {
+        margin-bottom: 3rem;
+    }
+    
+    .tools-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    /* Tool Cards Styling - Improved */
     .tool-card-container {
         background: var(--bg-primary);
         border: 2px solid var(--border-color);
@@ -108,34 +120,38 @@ st.markdown("""
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        min-height: 400px;
-        margin-bottom: 2rem;
+        min-height: 420px;
+        position: relative;
+        overflow: hidden;
     }
     
     .tool-card-container:hover {
-        transform: translateY(-4px);
+        transform: translateY(-6px);
         box-shadow: var(--card-hover-shadow);
         border-color: #667eea;
     }
     
     .tool-card-icon {
-        font-size: 3rem;
-        margin-bottom: 1rem;
+        font-size: 3.5rem;
+        margin-bottom: 1.5rem;
         display: block;
+        text-align: center;
     }
     
     .tool-card-title {
-        font-size: 1.5rem;
+        font-size: 1.6rem;
         font-weight: 700;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.75rem;
         color: var(--text-primary);
+        text-align: center;
     }
     
     .tool-card-subtitle {
         font-weight: 600;
         color: var(--text-secondary);
-        margin-bottom: 1rem;
+        margin-bottom: 1.5rem;
         font-size: 1rem;
+        text-align: center;
     }
     
     .tool-card-description {
@@ -143,6 +159,7 @@ st.markdown("""
         line-height: 1.6;
         margin-bottom: 1.5rem;
         flex-grow: 1;
+        text-align: center;
     }
     
     .tool-card-features {
@@ -152,9 +169,10 @@ st.markdown("""
     }
     
     .tool-card-features li {
-        margin: 0.5rem 0;
+        margin: 0.75rem 0;
         color: var(--text-secondary);
         padding-left: 0.5rem;
+        text-align: left;
     }
     
     /* Color coding for different tools */
@@ -177,6 +195,25 @@ st.markdown("""
     }
     .prism-card .tool-card-title {
         color: #16a34a;
+    }
+    
+    /* Button Styling for Cards */
+    .tool-launch-btn {
+        margin-top: 1rem;
+        width: 100%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .tool-launch-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
     }
     
     /* Section styling */
@@ -376,6 +413,12 @@ st.markdown("""
         display: table;
         clear: both;
     }
+    
+    /* Remove default streamlit spacing */
+    .block-container {
+        padding-top: 1rem;
+        padding-bottom: 0rem;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -459,8 +502,8 @@ def render_sidebar():
     with st.sidebar:
         st.markdown("""
         <div style="background: linear-gradient(180deg, #667eea 0%, #764ba2 100%); padding: 2rem; border-radius: 16px; margin-bottom: 1.5rem; text-align: center;">
-            <div style="font-size: 3rem; margin-bottom: 1rem;">🔬</div>
-            <h2 style="color: white; margin: 0; font-size: 2rem; font-weight: 800;">RIA</h2>
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🤖</div>
+            <h2 style="color: white; margin: 0; font-size: 2rem; font-weight: 800;">AURA</h2>
         </div>
         """, unsafe_allow_html=True)
         
@@ -497,93 +540,87 @@ def render_header(page_title):
     st.markdown(f"""
     <div class="main-header">
         <div class="logo-section">
-            <span>🔬</span>
-            <span>RIA</span>
+            <span>🤖</span>
+            <span>AURA</span>
         </div>
         <div class="header-fullform">
-            Regulatory Impact Analyzer
+            Automated Unified Regulatory Assistant
         </div>
     </div>
     """, unsafe_allow_html=True)
 
-# Home page with properly rendered cards using containers
+# Home page with properly rendered cards using HTML structure
 def render_home():
     render_header("Dashboard")
     
     # Platform Tools Section
     st.markdown("## 🚀 Platform Tools")
     
-    # Create three columns for the tool cards
+    # Create HTML structure for the tool cards
+    st.markdown("""
+    <div class="tools-section">
+        <div class="tools-grid">
+            <div class="tool-card-container ria-card">
+                <div class="tool-card-icon">🕵️</div>
+                <h3 class="tool-card-title">RIA - The Detective</h3>
+                <p class="tool-card-subtitle">Regulatory Impact Analyzer</p>
+                <p class="tool-card-description">AI-powered monitoring and analysis of regulatory updates, guidelines, and changes across global markets.</p>
+                <ul class="tool-card-features">
+                    <li>📈 Updates Feed</li>
+                    <li>🔍 Sources Monitoring</li>
+                    <li>📊 Analytics Dashboard</li>
+                    <li>🚨 Alert Settings</li>
+                </ul>
+            </div>
+            
+            <div class="tool-card-container rise-card">
+                <div class="tool-card-icon">🧭</div>
+                <h3 class="tool-card-title">RISE - The Guide</h3>
+                <p class="tool-card-subtitle">Regulatory Integration & Submission Engine</p>
+                <p class="tool-card-description">Workflow management and timeline tracking for regulatory submissions and milestone management.</p>
+                <ul class="tool-card-features">
+                    <li>⚡ Active Workflows</li>
+                    <li>📅 Timeline View</li>
+                    <li>🔗 Dependencies</li>
+                    <li>📋 Reports</li>
+                </ul>
+            </div>
+            
+            <div class="tool-card-container prism-card">
+                <div class="tool-card-icon">📚</div>
+                <h3 class="tool-card-title">PRISM - The Librarian</h3>
+                <p class="tool-card-subtitle">Product Regulatory Information & Submission Management</p>
+                <p class="tool-card-description">Comprehensive product portfolio and regulatory information management system.</p>
+                <ul class="tool-card-features">
+                    <li>🧬 Product Portfolio</li>
+                    <li>✅ Approvals & Renewals</li>
+                    <li>🔄 Variations Tracker</li>
+                    <li>📊 Compliance Dashboard</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Launch buttons in a clean row
     col1, col2, col3 = st.columns(3, gap="large")
     
     with col1:
-        # RIA Card using container to prevent overlap
-        with st.container():
-            st.markdown('<div class="tool-card-container ria-card">', unsafe_allow_html=True)
-            st.markdown('<div class="tool-card-icon">🕵️</div>', unsafe_allow_html=True)
-            st.markdown('<h3 class="tool-card-title">RIA - The Detective</h3>', unsafe_allow_html=True)
-            st.markdown('<p class="tool-card-subtitle">Regulatory Impact Analyzer</p>', unsafe_allow_html=True)
-            st.markdown('<p class="tool-card-description">AI-powered monitoring and analysis of regulatory updates, guidelines, and changes across global markets.</p>', unsafe_allow_html=True)
-            st.markdown('''
-            <ul class="tool-card-features">
-                <li>📈 Updates Feed</li>
-                <li>🔍 Sources Monitoring</li>
-                <li>📊 Analytics Dashboard</li>
-                <li>🚨 Alert Settings</li>
-            </ul>
-            ''', unsafe_allow_html=True)
-            st.markdown('</div>', unsafe_allow_html=True)
-        
         if st.button("Launch RIA Detective", use_container_width=True, key="launch_ria", type="primary"):
             st.session_state.current_page = 'RIA Detective'
             st.rerun()
     
     with col2:
-        # RISE Card using container to prevent overlap
-        with st.container():
-            st.markdown('<div class="tool-card-container rise-card">', unsafe_allow_html=True)
-            st.markdown('<div class="tool-card-icon">🧭</div>', unsafe_allow_html=True)
-            st.markdown('<h3 class="tool-card-title">RISE - The Guide</h3>', unsafe_allow_html=True)
-            st.markdown('<p class="tool-card-subtitle">Regulatory Integration & Submission Engine</p>', unsafe_allow_html=True)
-            st.markdown('<p class="tool-card-description">Workflow management and timeline tracking for regulatory submissions and milestone management.</p>', unsafe_allow_html=True)
-            st.markdown('''
-            <ul class="tool-card-features">
-                <li>⚡ Active Workflows</li>
-                <li>📅 Timeline View</li>
-                <li>🔗 Dependencies</li>
-                <li>📋 Reports</li>
-            </ul>
-            ''', unsafe_allow_html=True)
-            st.markdown('</div>', unsafe_allow_html=True)
-        
         if st.button("Launch RISE Guider", use_container_width=True, key="launch_rise", type="primary"):
             st.session_state.current_page = 'RISE Guider'
             st.rerun()
     
     with col3:
-        # PRISM Card using container to prevent overlap
-        with st.container():
-            st.markdown('<div class="tool-card-container prism-card">', unsafe_allow_html=True)
-            st.markdown('<div class="tool-card-icon">📚</div>', unsafe_allow_html=True)
-            st.markdown('<h3 class="tool-card-title">PRISM - The Librarian</h3>', unsafe_allow_html=True)
-            st.markdown('<p class="tool-card-subtitle">Product Regulatory Information & Submission Management</p>', unsafe_allow_html=True)
-            st.markdown('<p class="tool-card-description">Comprehensive product portfolio and regulatory information management system.</p>', unsafe_allow_html=True)
-            st.markdown('''
-            <ul class="tool-card-features">
-                <li>🧬 Product Portfolio</li>
-                <li>✅ Approvals & Renewals</li>
-                <li>🔄 Variations Tracker</li>
-                <li>📊 Compliance Dashboard</li>
-            </ul>
-            ''', unsafe_allow_html=True)
-            st.markdown('</div>', unsafe_allow_html=True)
-        
         if st.button("Launch PRISM Keeper", use_container_width=True, key="launch_prism", type="primary"):
             st.session_state.current_page = 'PRISM Keeper'
             st.rerun()
     
-    # Add clear separator before next section
-    st.markdown('<div class="clearfix"></div>', unsafe_allow_html=True)
+    # Add separator before next section
     st.markdown("---")
     
     # Recent activity and critical alerts
@@ -1229,8 +1266,8 @@ def main():
     st.markdown(f"""
     <div style="text-align: center; padding: 2rem; background: var(--bg-primary); border-radius: 12px; margin-top: 2rem; border: 1px solid var(--border-color);">
         <p style="margin: 0; color: var(--text-primary); font-weight: 600;">
-            🔬 <strong>RIA Platform</strong> | 
-            Regulatory Intelligence & Automation | 
+            🤖 <strong>AURA Platform</strong> | 
+            Automated Unified Regulatory Assistant | 
             <a href="https://indegene.com" target="_blank" style="color: #667eea;">Indegene Solutions</a>
         </p>
         <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: var(--text-secondary);">
