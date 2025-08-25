@@ -550,6 +550,7 @@ def render_header(page_title):
     """, unsafe_allow_html=True)
 
 # Home page with properly rendered cards using HTML structure
+# Home page with properly rendered cards using HTML structure
 def render_home():
     render_header("Dashboard")
     
